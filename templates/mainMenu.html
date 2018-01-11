@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="sidenav">
+<img class="logo" src="../static/yamo3.png" />
+  {% block content %}{% endblock %}
+  <div class="playlists">
+     <label class="wysrodkuj">PLAYLISTA</label>
+    <p class="editions"> Example</p>
+    
+    <div class="newPlaylist">
+    <a href="/">
+        <span class="glyphicon glyphicon-plus"></span>
+        Nowa playlista</a>
+    </div>
+    </div>
+</div>
+<div class="topnav">
+  <!--<a class="active" href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>-->
+  <div class="search-container">
+      <input type="text" placeholder="Search.." name="search"/>
+      <button type="submit"><i class="glyphicon glyphicon-search"></i></button>
+  </div>
+</div>
+{% block content_body %}{% endblock %}
+
+{% endblock %}

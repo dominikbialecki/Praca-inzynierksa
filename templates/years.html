@@ -1,0 +1,61 @@
+{% extends "mainMenu.html" %}
+{% block content %}
+<label>TWOJA BIBLIOTEKA</label>
+<a href="/">Albumy</a>
+<a href="/artists">Artyści</a>
+<a class="active" href="/years">Rok produkcji</a>
+<a href="/songs">Muzyka</a>
+<a href="/files_editions">Edycja plików</a>
+{% endblock %}
+{% block content_body %}
+<div class="main2">
+    {% for i in range(years|length) %}
+        <br>
+        {% if years[i].year=="" or years[i].year=="0" %}
+            <p>Nieznany rok</p>
+        {% else %}
+            <p>{{years[i].year}}</p>
+        {% endif %}
+        <table class="table">
+        <thead>
+            <tr>
+                <!--<th>Tytuł</th>
+                <th>Artysta</div></th>-->
+                <th colspan="2">Album<th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% set dane='span'+i|string %}
+                <td id="first"><a><span id="{{dane}}" onclick="change(this.id,{{i}})" class="glyphicon glyphicon-plus"></span></a></td>
+                {% if years[i].album=="" %}
+                    <td>Nieznany album </td>
+                {% else %}
+                    <td>{{years[i].album}}</td>
+                {% endif %}
+            </tr>
+            <tr id="{{i}}" style="display: none;">
+                <td colspan="4" >
+                <div class="row">
+                <div id="firsts" class="col-md-6 col-sm-6">Tytuł utworu</div>
+                <div id="firsts" class="col-md-6 col-sm-6">Artysta</div>
+                            {% for j in range(years[i].title|length) %}
+                            {% if years[i].title[j]=="" %}
+                               <div id="seconds" class="col-md-6 col-sm-6">Nieznany tytuł</div>
+                            {% else %}
+                                <div id="seconds" class="col-md-6 col-sm-6">{{years[i].title[j]}}</div>
+                            {% endif %}
+                            
+                            {% if years[i].artist[j]=="" %}
+                               <div id="seconds" class="col-md-6 col-sm-6">Nieznany artysta</div>
+                            {% else %}
+                               <div id="seconds" class="col-md-6 col-sm-6">{{years[i].artist[j]}}</div>
+                            {% endif %}
+                    {% endfor %}
+                </div></td>
+            </tr>
+        </tbody>
+        </table>
+    {% endfor %}
+</div>
+{% endblock %}

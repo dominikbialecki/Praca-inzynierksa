@@ -1,0 +1,52 @@
+{% extends "mainMenu.html" %}
+{% block content %}
+<label>TWOJA BIBLIOTEKA</label>
+<a href="/">Albumy</a>
+<a href="/artists">Artyści</a>
+<a href="/years">Rok produkcji</a>
+<a class="active" href="/songs">Muzyka</a>
+<a href="/files_editions">Edycja plików</a>
+{% endblock %}
+{% block content_body %}
+<div class="main2">
+    {% for i in range(allfunc|length) %}
+        <br>
+        {% if allfunc[i].artist=="" %}
+            <p>Nieznany artysta</p>
+        {% else %}
+            <p>{{allfunc[i].artist}}</p>
+        {% endif %}
+        <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Tytuł</th>
+                <th>Nazwa Albumu</div></th>
+                <th>Rok</div></th>
+            </tr>
+        </thead>
+        <tbody>
+    {% for j in range(allfunc[i].title|length) %}
+            <tr>
+                {% if allfunc[i].title[j]=="" %}
+                    <td>Nieznany tytuł</td>
+                {% else %}
+                    <td>{{allfunc[i].title[j]}}</td>
+                {% endif %}
+                
+                {% if allfunc[i].album[j]=="" %}
+                    <td>Nieznany album </td>
+                {% else %}
+                    <td>{{allfunc[i].album[j]}}</td>
+                {% endif %}
+                {% if allfunc[i].year[j]=="" or allfunc[i].year[j]==0 %}
+                    <td>Nieznany rok</td>
+                {% else %}
+                    <td>{{allfunc[i].year[j]}}</td>
+                {% endif %}
+            </tr>
+    {% endfor %}
+        </tbody>
+        </table>
+    {% endfor %}
+</div>
+{% endblock %}

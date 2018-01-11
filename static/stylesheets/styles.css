@@ -1,0 +1,201 @@
+h1 {
+    text-align: center;
+}
+
+h2{
+    margin-left: 5rem;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.logo {
+    vertical-align: middle;
+    display: block;
+ }
+
+label {
+    font-family: 'Arial Bold';
+    font-style: italic;
+    font-size: 18px;
+}
+.playlists{
+    margin-top:20%;
+    height: 30%;
+}
+
+.newPlaylist{
+    height: 30px;
+    margin-top:30%;
+}
+
+.wysrodkuj{
+    padding-left:40px;
+}
+
+.library label{
+    width: 240px;
+    text-align: center;
+}
+
+.editions{
+    color: white;
+    padding-left: 20px;
+}
+.sidenav {
+    height: 100%;
+    width: 240px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a {
+    padding: 10px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.main {
+    margin-left: 240px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+.sidenav a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.my_pages{
+    width: 300px;
+    height:300px
+}
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+/*
+.navbar {
+    padding-left:240px;
+    overflow: hidden;
+    background-color: #333;
+   /* position: fixed; /* Set the navbar to fixed position */
+
+
+.main2 {
+    margin-top: 30px;
+    margin-left: 240px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 30px;
+}
+.topnav {
+    top: 0;
+    width:100%;
+    height:60px;
+    position: fixed;
+    padding-left:240px;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.topnav a{
+    float: left;
+    display: block;
+    color: #818181;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: #818181;
+}
+
+.topnav a.active {
+    background-color: #2196F3;
+    color: white;
+}
+
+.topnav .search-container {
+    float: right;
+}
+
+.topnav input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+}
+
+.topnav .search-container button {
+    float: right;
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+}
+
+.topnav .search-container button:hover {
+    background: #ccc;
+}
+.dummy {
+    font-size: 12px;
+    margin-top: 20%;
+}
+.thumbnail {
+    top: 5px;
+    bottom: 0;
+    left: 15px;
+    right: 0;
+    text-align:center;
+    font-size:18px;
+    color: black;
+    /*padding-top:calc(50% - 30px);*/
+}
+
+.main2 a:hover{
+     color: #818181;
+}
+
+.lead{
+    font-size:1.25rem;
+    font-weight:300
+}
+
+table {
+    padding: .75rem;
+    font-size: 18px;
+}
+td {
+    text-align: inherit;
+}
+#first{
+    width:15px;
+}
+
+#firsts{
+    font-size: 24px;
+    font-weight: bold;
+}
+#seconds{
+    padding-left: 40px;
+}
