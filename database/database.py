@@ -22,7 +22,7 @@ def create_table():
     try:
         db = sqlite3.connect(dbfile)
         cursor = db.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS images(artist TEXT, album TEXT, pathfile TEXT, shortpath TEXT)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS images(artist TEXT, album TEXT,year TEXT, pathfile TEXT, shortpath TEXT)")
         db.commit()
         db.close()
         return 2
@@ -41,7 +41,19 @@ def checkTable():
         return result
     except Exception as e:
         raise e
-
+    
+def returnAllTable():
+    try:
+        db = sqlite3.connect(dbfile)
+        cursor = db.cursor()
+        query="select artist,year,album,shortpath from `images`"
+        cursor.execute(query)
+        result=cursor.fetchall() 
+        db.close()
+        return result
+    except Exception as e:
+        raise e
+    
 def returnAlbumPath():
     try:
         db = sqlite3.connect(dbfile)
@@ -54,11 +66,23 @@ def returnAlbumPath():
     except Exception as e:
         raise e
     
-def returnArtistPath():
+def returnArtist():
     try:
         db = sqlite3.connect(dbfile)
         cursor = db.cursor()
-        query="select artist,shortpath from `images`"
+        query="select distinct artist from `images`"
+        cursor.execute(query)
+        result=cursor.fetchall() 
+        db.close()
+        return result
+    except Exception as e:
+        raise e
+    
+def returnYear():
+    try:
+        db = sqlite3.connect(dbfile)
+        cursor = db.cursor()
+        query="select distinct year from `images`"
         cursor.execute(query)
         result=cursor.fetchall() 
         db.close()
@@ -87,20 +111,19 @@ def insertToTable(albums,path):
     try:
         db = sqlite3.connect(dbfile)
         cursor = db.cursor()
-        query = ("INSERT INTO images(artist, album, pathfile, shortpath) VALUES(?,?,?,?)")
+        query = ("INSERT INTO images(artist, album, year, pathfile, shortpath) VALUES(?,?,?,?,?)")
         
         for i in range(len(albums)):
             if(albums[i][2]!='None'):
                 temp="/static/images/cover"+str(i)+".jpg"
                 allpath=path+temp
                 shortpath=".."+temp
-                data_employee = (albums[i][1],albums[i][0],allpath ,shortpath)
+                data_employee = (albums[i][1],albums[i][0],albums[i][3],allpath ,shortpath)
                 new=albums[i][2]
                 result=cursor.execute(query, data_employee)
-                print(albums[i][2])
                 shutil.copy2(albums[i][2],allpath)
             else:
-                data_employee = (albums[i][1],albums[i][0],"" ,"")
+                data_employee = (albums[i][1],albums[i][0],albums[i][3],"" ,"")
                 result=cursor.execute(query, data_employee)
         db.commit()
         db.close()   

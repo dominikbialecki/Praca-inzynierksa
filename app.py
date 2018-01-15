@@ -4,14 +4,13 @@ import sys
 import inspect, os
 path=os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, path)
-import python.beetsCommands as bc, python.beetsCombination as bk, python.beetsYears as by
+import python.beetsCommands as bc, python.beetsAlbSort as babl
 import database.database as db
 app = Flask(__name__)
 db.create_table()
 
 def organisationBeets():
     albums=bc.returnAlbums()
-    print(albums)
     if(len(db.checkTable())==0):
         if(db.insertToTable(albums,path)>0):
             print("dodano dane")
@@ -46,24 +45,23 @@ def organisationBeets():
     
 @app.route("/")
 def albumy():
-    result=db.returnAlbumPath()  
-    print(result)
-    return render_template('albums.html',result=result)
+    allTables=db.returnAllTable()
+    alphabets=babl.sortAlfabets(allTables)
+    y=db.returnYear()
+    years=babl.sortYear(y,allTables)
+    art=db.returnArtist()
+    print(art)
+    artists=babl.sortArt(art,allTables)
+    listletters=babl.listLetters(allTables)
+    return render_template('albums.html',alphabets=alphabets,years=years,artists=artists,y=y,art=art,listletters=listletters)
 
 @app.route("/artists")
 def artysci():
-    result=db.returnArtistPath() 
-    return render_template('artists.html',result=result)
+    return render_template('artists.html')
 
 @app.route("/songs")
 def muzyka():
-    allfunc=bk.func(bc.returnTitles(),bc.returnAlbums())
-    return render_template('songs.html',allfunc=allfunc)
-
-@app.route("/years")
-def rok():
-    years=by.func(bc.returnTitles(),bc.returnOnlyYear(),bc.returnAlbums())
-    return render_template('years.html',years=years)
+    return render_template('songs.html')
 
 @app.route("/files_editions")
 def edycjaP():

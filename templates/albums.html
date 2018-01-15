@@ -1,39 +1,290 @@
 {% extends "mainMenu.html" %}
 {% block content %}
-<label>TWOJA BIBLIOTEKA</label>
-    <a class="active" href="/">Albumy</a>
-    <a href="/artists">Artyści</a>
-    <a href="/years">Rok produkcji</a>
-    <a href="/songs">Muzyka</a>
-    <a href="/files_editions">Edycja plików</a>
+<a class="active" href="/">Albumy</a>
+<a href="/artists">Artyści</a>
+<a href="/songs">Utwory</a>
+       <!-- <a href="/years">Rok produkcji</a>
+        <a href="/songs">Muzyka</a>
+        <a href="/files_editions">Edycja plików</a>-->
 {% endblock %}
+{% block head %}
+<div class="column2 pointer">
+            <span id="list" onclick="switching(this.id,'box','0')" class="glyphicon glyphicon-th-list" value="0"></span>
+            <span id="box" onclick="switching(this.id,'list')" class="glyphicon glyphicon-th active" ></span>
+            <div class="dropdown">
+                <span class="glyphicon glyphicon-option-vertical"></span>
+                    <div class="dropdown-content">
+                        <span id="0" onclick="sortAlb(this.id);" class="active">A-Z</span>
+                        <span id="1" onclick="sortAlb(this.id);" class="">Z-A</span>
+                        <span id="2" onclick="sortAlb(this.id);" class="">Artyści</span>
+                        <span id="3" onclick="sortAlb(this.id);" class="">Roku</span>
+                        <!--<span id="3" onclick="listblock('list','blocks',this.id)" class="">Dowolne</span>-->
+                    </div>
+            </div>
+</div>
+{% endblock %}
+
 {% block content_body %}
+
 
 <div class="main2">
 	
-<div class="container">
-	<div class="row">
-        {% for i in range(result|length) %}
-            {% if result[i][0] == "" %}
-            <div class="col-md-4 col-sm-4">
-                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                <a href="#x" class="thumbnail purple">Nieznany album</a>
-            </div>
-              {% elif result[i][0]!= "" and result[i][1]=="" %}
-                 <div class="col-md-4 col-sm-4">
-                    <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                    <a href="#x" class="thumbnail purple">{{result[i][0]}}</a>
-                     <p>../static/images/image-not-found.jpg</p>
-                </div>
-            {% else %}
-                 <div class="col-md-4 col-sm-4">
-                <div class="dummy"><img class="my_pages" src="{{result[i][1]}}"/></div>
-                <a href="#x" class="thumbnail purple">{{result[i][0]}}</a>
-            </div>
-            {% endif %}
-      {% endfor %}
-      </div>
+    <div id="box0" class="container" style="display: block;">
+        <div class="row">
+            {% for i in range(alphabets|length) %}
+                {% for j in range(alphabets[i].path|length) %}
+                    {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
+                        <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                        </div>
+                        {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
+                            <div class="col-md-2 col-sm-4">
+                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                            </div>
+                        {% else %}
+                            <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                        </div>
+                        {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
       
+    <div id="box1" class="container" style="display: none;">
+        <div class="row">
+            {% for i in range(alphabets|length-1,-1,-1) %}
+                {% for j in range(alphabets[i].path|length) %}
+                    {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
+                        <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                        </div>
+                        {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
+                            <div class="col-md-2 col-sm-4">
+                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                            </div>
+                        {% else %}
+                            <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                        </div>
+                        {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+    </div>
+        
+    <div id="box2" class="container" style="display: none;">
+        <div class="row">
+            {% for i in range(artists|length) %}
+                {% for j in range(artists[i].path|length) %}
+                    {% if artists[i].path[j] == 'brak' and artists[i].album[j]==''%}
+                        <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                        </div>
+                        {% elif artists[i].album[j]!='' and artists[i].path[j] == 'brak' %}
+                            <div class="col-md-2 col-sm-4">
+                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                            </div>
+                        {% else %}
+                            <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="{{artists[i].path[j]}}"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                        </div>
+                        {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+    </div>
+        
+    <div id="box3" class="container" style="display: none;">
+        <div class="row">
+            {% for i in range(years|length) %}
+                {% for j in range(years[i].path|length) %}
+                    {% if years[i].path[j] == 'brak' and years[i].album[j]==''%}
+                        <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                        </div>
+                        {% elif years[i].album[j]!='' and years[i].path[j] == 'brak' %}
+                            <div class="col-md-2 col-sm-4">
+                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                            </div>
+                        {% else %}
+                            <div class="col-md-2 col-sm-4">
+                            <div class="dummy"><img class="my_pages" src="{{years[i].path[j]}}"/></div>
+                            <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                        </div>
+                        {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+    </div>
+        
+    <div id="list0" class="container" style="display: none;">
+         {% for i in range(alphabets|length) %}
+                <br>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{{listletters[i]}}<th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                  <div class="row">
+                                    {% for j in range(alphabets[i].path|length) %}
+                                        {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
+                                            <div class="col-md-2 col-sm-4">
+                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                                <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                                            </div>
+                                            {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
+                                                <div class="col-md-2 col-sm-4">
+                                                    <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                                    <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                                                </div>
+                                            {% else %}
+                                                <div class="col-md-2 col-sm-4">
+                                                <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
+                                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                                            </div>
+                                            {% endif %}
+                                    {% endfor %}
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+        {% endfor %}
+    </div>
+        
+    <div id="list1" class="container" style="display: none;">
+        {% for i in range(alphabets|length-1,-1,-1) %}
+                <br>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{listletters[i]}}<th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    {% for j in range(alphabets[i].path|length) %}
+                                        {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
+                                            <div class="col-md-2 col-sm-4">
+                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                                <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                                            </div>
+                                            {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
+                                                <div class="col-md-2 col-sm-4">
+                                                    <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                                    <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                                                </div>
+                                            {% else %}
+                                                <div class="col-md-2 col-sm-4">
+                                                <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
+                                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                                            </div>
+                                        {% endif %}
+                                {% endfor %}
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        {% endfor %}
+    </div>
+        
+    <div id="list2" class="container" style="display: none;">
+        {% for i in range(artists|length) %}
+         <br>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{artists[i].artist}}<th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                {% for j in range(artists[i].path|length) %}
+                                    {% if artists[i].path[j] == 'brak' and artists[i].album[j]==''%}
+                                        <div class="col-md-2 col-sm-4">
+                                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                                        </div>
+                                        {% elif artists[i].album[j]!='' and artists[i].path[j] == 'brak' %}
+                                            <div class="col-md-2 col-sm-4">
+                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                                <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-md-2 col-sm-4">
+                                            <div class="dummy"><img class="my_pages" src="{{artists[i].path[j]}}"/></div>
+                                            <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                                        </div>
+                                        {% endif %}
+                                {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        {% endfor %}
+    </div>
+        
+    <div id="list3" class="container" style="display: none;">
+         {% for i in range(years|length) %}
+         <br>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{years[i].year}}<th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>
+                                    <div class="row">
+                                    {% for j in range(years[i].path|length) %}
+                                        {% if years[i].path[j] == 'brak' and years[i].album[j]==''%}
+                                            <div class="col-md-2 col-sm-4">
+                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                                <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                                            </div>
+                                            {% elif years[i].album[j]!='' and years[i].path[j] == 'brak' %}
+                                                <div class="col-md-2 col-sm-4">
+                                                    <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                                    <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                                                </div>
+                                            {% else %}
+                                                <div class="col-md-2 col-sm-4">
+                                                <div class="dummy"><img class="my_pages" src="{{years[i].path[j]}}"/></div>
+                                                <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                                            </div>
+                                            {% endif %}
+                                    {% endfor %}
+                                    </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        {% endfor %}
+    </div>
+        
 </div>
 
 {% endblock %}

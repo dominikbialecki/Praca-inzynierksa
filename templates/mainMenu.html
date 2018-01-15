@@ -1,10 +1,18 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<div class="sidenav">
-<img class="logo" src="../static/yamo3.png" />
-  {% block content %}{% endblock %}
-  <div class="playlists">
+<div id="sid2" class="sidenav2">
+    <span onclick="openNav()" class="glyphicon glyphicon-chevron-right"></span>
+</div>
+<div id="sid" class="sidenav" style="width:0;">
+    <div class="right">
+     <span onclick="closeNav()" class="glyphicon glyphicon-chevron-left"></span>
+    </div>
+    <div class="left">
+        <label>Muzyka</label>
+        {% block content %}{% endblock %}
+    </div>
+  <!--<div class="playlists">
      <label class="wysrodkuj">PLAYLISTA</label>
     <p class="editions"> Example</p>
     
@@ -13,16 +21,23 @@
         <span class="glyphicon glyphicon-plus"></span>
         Nowa playlista</a>
     </div>
-    </div>
+    </div>-->
 </div>
+
 <div class="topnav">
-  <!--<a class="active" href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#contact">Contact</a>-->
-  <div class="search-container">
-      <input type="text" placeholder="Search.." name="search"/>
-      <button type="submit"><i class="glyphicon glyphicon-search"></i></button>
-  </div>
+        <div class="row2">
+            <div class="column21">
+                <img class="logo" src="../static/yamo3.png" align="left"/>
+            </div>
+            <div class="column22">
+                <div class="search-container">
+                    <input type="text" placeholder="Search.." name="search"/>
+                    <button type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+            </div>
+        
+                {% block head %}{% endblock %}
+    </div>
 </div>
 {% block content_body %}{% endblock %}
 

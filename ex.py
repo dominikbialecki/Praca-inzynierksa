@@ -1,4 +1,4 @@
-from beets.plugins import BeetsPlugin
+"""from beets.plugins import BeetsPlugin
 from beets.ui import Subcommand
 from beets.library import  Item
 import beets.mediafile as mediafile
@@ -14,5 +14,13 @@ class FooPlugin(BeetsPlugin):
 FooPlugin()
 item = Item.from_path('~/Dokumenty/music/music_l/Jula/Na Krawedzi/01 Tylko Ty.mp3')
 item['foo'] == 'ham'
-item.write()
-    
+item.write()"""
+
+
+
+
+
+
+
+
+

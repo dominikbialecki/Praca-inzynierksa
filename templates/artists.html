@@ -1,12 +1,29 @@
 {% extends "mainMenu.html" %}
 {% block content %}
-<label>TWOJA BIBLIOTEKA</label>
 <a href="/">Albumy</a>
 <a class="active" href="/artists">Artyści</a>
-<a href="/years">Rok produkcji</a>
-<a href="/songs">Muzyka</a>
-<a href="/files_editions">Edycja plików</a>
+<a href="/songs">Utwory</a>
+    <!--<a href="/years">Rok produkcji</a>
+    <a href="/songs">Muzyka</a>
+    <a href="/files_editions">Edycja plików</a>-->
 {% endblock %}
+
+{% block head %}
+<div class="column2 pointer">
+            <span id="list" onclick="listblockArt(this.id,'blocks','0')" class="glyphicon glyphicon-th-list" value="0"></span>
+            <span id="blocks" onclick="gotoblockArt(this.id,'list')" class="glyphicon glyphicon-th active" ></span>
+            <!--<div class="dropdown">
+                <span class="glyphicon glyphicon-option-vertical"></span>
+                <div class="dropdown-content">
+                    <span id="0" onclick="listblockArt('list','blocks',this.id)" class="">A-Z</span>
+                    <span id="1" onclick="listblockArt('list','blocks',this.id)" class="">Artyści</span>
+                    <!--<span id="3" onclick="listblock('list','blocks',this.id)" class="">Dowolne</span>
+                </div>
+            </div>-->
+</div>
+
+{% endblock %}
+
 {% block content_body %}
 <div class="main2">
 	
@@ -14,18 +31,18 @@
 	<div class="row">
         {% for i in range(result|length) %}
             {% if result[i][0]!= "" and result[i][1]!="" %}
-                 <div class="col-md-4 col-sm-4">
+                 <div class="col-md-2 col-sm-4">
                     <div class="dummy"><img class="my_pages" src="{{result[i][1]}}"/></div>
                     <a href="#x" class="thumbnail purple">{{result[i][0]}}</a>
                 </div>
                 
             {% elif result[i][0]!= "" and result[i][1]=="" %}
-                 <div class="col-md-4 col-sm-4">
+                 <div class="col-md-2 col-sm-4">
                     <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
                     <a href="#x" class="thumbnail purple">{{result[i][0]}}</a>
                 </div>
             {% else %}
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-2 col-sm-4">
                     <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
                     <a href="#x" class="thumbnail purple">Nieznany album</a>
                 </div>

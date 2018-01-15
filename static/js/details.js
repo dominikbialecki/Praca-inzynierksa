@@ -1,13 +1,3 @@
-/*function button(id){
-    var td = document.getElementById(id);
-    if(td.style.display=='none'){
-        td.style.display="table-row";
-    }
-    else{
-        td.style.display="none";
-    }
-}
-*/
 function change(dane, i){
     var td = document.getElementById(i);
     if(td.style.display=='none'){

@@ -11,11 +11,6 @@ html, body {
     width: 100%;
 }
 
-.logo {
-    vertical-align: middle;
-    display: block;
- }
-
 label {
     font-family: 'Arial Bold';
     font-style: italic;
@@ -44,17 +39,21 @@ label {
     color: white;
     padding-left: 20px;
 }
+
+
 .sidenav {
-    height: 100%;
-    width: 240px;
-    position: fixed;
+    height: 90%;
+    width: 280px;
+    position:fixed;
+    color:white;
     z-index: 1;
-    top: 0;
+    bottom: 0;
     left: 0;
-    background-color: #111;
+    transition: 0.5s;
+    background: black;
     overflow-x: hidden;
-    padding-top: 20px;
 }
+
 
 .sidenav a {
     padding: 10px 8px 6px 16px;
@@ -80,40 +79,58 @@ label {
 }
 
 .my_pages{
-    width: 300px;
-    height:300px
+    width: 150px;
+    height:150px
+}
+
+#lines{
+    line-height: 0;
 }
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
 }
 
-/*
-.navbar {
-    padding-left:240px;
-    overflow: hidden;
-    background-color: #333;
-   /* position: fixed; /* Set the navbar to fixed position */
-
-
 .main2 {
     margin-top: 30px;
-    margin-left: 240px; /* Same as the width of the sidenav */
     font-size: 28px; /* Increased text to enable scrolling */
     padding: 30px;
 }
+
 .topnav {
     top: 0;
     width:100%;
-    height:60px;
+    height:65px;
     position: fixed;
-    padding-left:240px;
     overflow: hidden;
-    background-color: #333;
+    background-color: black;
 }
 
-.topnav a{
+.column2 {
     float: left;
+    width: 33.33%;
+    padding: 10px;
+    height: 60px; /* Should be removed. Only for demonstration */
+}
+.column21 {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    height: 60px; /* Should be removed. Only for demonstration */
+}
+.column22 {
+    float: left;
+    width: 45%;
+    padding: 10px;
+    height: 60px; /* Should be removed. Only for demonstration */
+}
+.row2 {
+    width:100%;
+    content: "";
+    display: table;
+    clear: both;
+}
+/*.topnav a{
     display: block;
     color: #818181;
     text-align: center;
@@ -121,45 +138,60 @@ label {
     text-decoration: none;
     font-size: 17px;
 }
-
-.topnav a:hover {
-    background-color: #ddd;
-    color: #818181;
-}
-
-.topnav a.active {
-    background-color: #2196F3;
-    color: white;
-}
-
-.topnav .search-container {
-    float: right;
-}
-
-.topnav input[type=text] {
+*/
+.column22 input[type=text] {
     padding: 6px;
     margin-top: 8px;
     font-size: 17px;
     border: none;
 }
 
-.topnav .search-container button {
-    float: right;
-    padding: 6px 10px;
-    margin-top: 8px;
-    margin-right: 16px;
-    background: #ddd;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;
+.column22 .search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+.column22 .search-container button:hover {
+  background: #ccc;
+}
+.pointer span:hover {
+    color: #818181;
 }
 
-.topnav .search-container button:hover {
+.pointer span.active {
+    color: white;
+}
+.pointer span{
+    padding-top:8px;
+    color: #696969;
+}
+.pointer{
+    font-size:32px;
+    padding-left:18%;
+}
+.logo{
+    width: 120px;
+    height: 60px;
+    padding-bottom: 10px;
+}
+.column22 .search-container button:hover {
     background: #ccc;
+}
+.column22 .search-container{
+    float:left;
 }
 .dummy {
     font-size: 12px;
     margin-top: 20%;
+}
+.dummy2 {
+    font-size: 12px;
+    margin-bottom: 80px;
 }
 .thumbnail {
     top: 5px;
@@ -199,3 +231,82 @@ td {
 #seconds{
     padding-left: 40px;
 }
+
+.sidenav2 {
+    height: 50%;
+    width: 20px;
+    position:fixed;
+    text-align:center;
+    bottom:0;
+}
+.sidenav .left{
+    height: 100%;
+    width:230px;
+    left:0;
+    float:left;
+}
+
+.left label{
+    width:240px;
+    text-align:center;
+    padding-top:40px;
+}
+.sidenav .right{
+    height: 100%;
+    float:right;
+    width:30px;
+    padding-top:250px;
+}
+
+/* dropdowns menus*/
+
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: fixed;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: fixed;
+    font-size:16px;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content span {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content span.active{
+    background: green;
+}
+/* Change color of dropdown links on hover */
+.dropdown-content span:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
