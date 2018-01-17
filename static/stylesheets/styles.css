@@ -56,9 +56,8 @@ label {
 
 
 .sidenav a {
-    padding: 10px 8px 6px 16px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 23px;
     color: #818181;
     display: block;
 }
@@ -236,20 +235,20 @@ td {
     height: 50%;
     width: 20px;
     position:fixed;
-    text-align:center;
     bottom:0;
 }
 .sidenav .left{
+    text-align:center;
     height: 100%;
     width:230px;
     left:0;
     float:left;
+    padding-top: 20px;
 }
 
-.left label{
-    width:240px;
-    text-align:center;
-    padding-top:40px;
+.left .pos{
+    text-align:left;
+    padding-left: 20px;
 }
 .sidenav .right{
     height: 100%;
@@ -308,5 +307,48 @@ td {
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
+}
+
+hr {
+    display: block;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0; 
+}
+
+.main3 {
+    margin-top: 30px;
+    font-size: 28px;
+    padding-left: 10%;
+    padding-bottom:40px;
+}
+.table2{
+    border-spacing: 0;
+    width: 90%;
+    border: 1px solid #ddd;
+}
+
+.table2 th {
+    text-align: center;
+    padding: 2px;
+    width: 100px;
+}
+
+.table2 td {
+    text-align: left;
+    padding: 2px;
+    padding-left: 8px;
+    width: 100px;
+}
+.table2 tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.table2 span:hover{
+    color: #ccc;
+}
+.more2 br{
+    padding-top:100px;
 }
 

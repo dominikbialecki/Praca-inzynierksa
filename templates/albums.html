@@ -15,9 +15,9 @@
                 <span class="glyphicon glyphicon-option-vertical"></span>
                     <div class="dropdown-content">
                         <span id="0" onclick="sortAlb(this.id);" class="active">A-Z</span>
-                        <span id="1" onclick="sortAlb(this.id);" class="">Z-A</span>
-                        <span id="2" onclick="sortAlb(this.id);" class="">Artyści</span>
-                        <span id="3" onclick="sortAlb(this.id);" class="">Roku</span>
+                        <span id="1" onclick="sortAlb(this.id);" class="">Artyści</span>
+                        <span id="2" onclick="sortAlb(this.id);" class="">Roku</span>
+                        <!--<span id="3" onclick="sortAlb(this.id);" class="">Z-A</span>-->
                         <!--<span id="3" onclick="listblock('list','blocks',this.id)" class="">Dowolne</span>-->
                     </div>
             </div>
@@ -54,7 +54,7 @@
         </div>
     </div>
       
-    <div id="box1" class="container" style="display: none;">
+ <!--   <div id="box1" class="container" style="display: none;">
         <div class="row">
             {% for i in range(alphabets|length-1,-1,-1) %}
                 {% for j in range(alphabets[i].path|length) %}
@@ -78,8 +78,8 @@
             {% endfor %}
             </div>
     </div>
-        
-    <div id="box2" class="container" style="display: none;">
+        -->
+    <div id="box1" class="container" style="display: none;">
         <div class="row">
             {% for i in range(artists|length) %}
                 {% for j in range(artists[i].path|length) %}
@@ -104,7 +104,7 @@
             </div>
     </div>
         
-    <div id="box3" class="container" style="display: none;">
+    <div id="box2" class="container" style="display: none;">
         <div class="row">
             {% for i in range(years|length) %}
                 {% for j in range(years[i].path|length) %}
@@ -168,7 +168,7 @@
         {% endfor %}
     </div>
         
-    <div id="list1" class="container" style="display: none;">
+  <!--  <div id="list1" class="container" style="display: none;">
         {% for i in range(alphabets|length-1,-1,-1) %}
                 <br>
                 <table class="table">
@@ -205,9 +205,9 @@
                     </tbody>
                 </table>
         {% endfor %}
-    </div>
+    </div>-->
         
-    <div id="list2" class="container" style="display: none;">
+    <div id="list1" class="container" style="display: none;">
         {% for i in range(artists|length) %}
          <br>
                 <table class="table">
@@ -246,7 +246,7 @@
         {% endfor %}
     </div>
         
-    <div id="list3" class="container" style="display: none;">
+    <div id="list2" class="container" style="display: none;">
          {% for i in range(years|length) %}
          <br>
                 <table class="table">

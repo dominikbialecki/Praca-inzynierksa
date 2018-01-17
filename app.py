@@ -4,7 +4,7 @@ import sys
 import inspect, os
 path=os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, path)
-import python.beetsCommands as bc, python.beetsAlbSort as babl
+import python.beetsCommands as bc, python.beetsAlbSort as babl, python.beetsArtSort as bart
 import database.database as db
 app = Flask(__name__)
 db.create_table()
@@ -40,7 +40,6 @@ def organisationBeets():
                 print("Blad operacji")
     else:
         print("Blad operacji")
-        
     #db.deleteAllTask()
     
 @app.route("/")
@@ -57,11 +56,13 @@ def albumy():
 
 @app.route("/artists")
 def artysci():
-    return render_template('artists.html')
+    arts=bart.sortArt(db.returnAllTable(),db.returnArtist())
+    return render_template('artists.html',arts=arts)
 
 @app.route("/songs")
 def muzyka():
-    return render_template('songs.html')
+    titles=sorted(bc.returnTitles())
+    return render_template('songs.html',titles=titles)
 
 @app.route("/files_editions")
 def edycjaP():

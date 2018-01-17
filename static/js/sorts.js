@@ -1,5 +1,5 @@
 function switching(id1,id2){
-    var ids=['0','1','2','3'];
+    var ids=['0','1','2'];
     var td = document.getElementById(id1);
     if(!td.classList.contains('active')){
         td.classList.add("active");
@@ -18,7 +18,7 @@ function switching(id1,id2){
 }
 
 function change(check,id){
-     var ids=['0','1','2','3'];
+     var ids=['0','1','2'];
      for (i = 0; i < ids.length; i++) { 
             if(document.getElementById(ids[i]).classList.contains('active')){
                 document.getElementById(ids[i]).classList.remove("active");
@@ -41,18 +41,13 @@ function sortAlb(spanId){
     }
 }
 
-function blockAlb(id,id2){
-    var td = document.getElementById(id);
-    var ids=['0','1','2'];
-    if(td.id=='blocks' && !td.classList.contains('active')){
-        document.getElementById(id2).classList.remove("active");
+function switching2(id1,id2){
+    var td = document.getElementById(id1);
+    if(!td.classList.contains('active')){
         td.classList.add("active");
-         /*document.getElementById('box').style.display='block'
-        for (i = 0; i < ids.length; i++) { 
-            if(document.getElementById(ids[i]).classList.contains('active')&& document.getElementById('list'+ids[i]).style.display=='block'){
-               document.getElementById(ids[i]).classList.remove("active");
-               document.getElementById('list'+ids[i]).style.display='none';
-            }
-        }*/
+        document.getElementById(id2).classList.remove("active");
+        document.getElementById(id2+"0").style.display='none';
+        document.getElementById(id1+"0").style.display='block';
     }
 }
+
