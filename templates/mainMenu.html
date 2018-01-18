@@ -4,6 +4,16 @@
 <div id="sid2" class="sidenav2">
     <span onclick="openNav()" class="glyphicon glyphicon-chevron-right"></span>
 </div>
+
+<div id="local2" class="slh">
+    <span onclick="openNavSL()" class="glyphicon glyphicon-chevron-left"></span>
+</div>
+
+<div id="local" class="sls" style="width:0;">
+    <span onclick="closeNavSL()" class="glyphicon glyphicon-chevron-right"></span>
+    <input type="text" id="myInput" placeholder="Search">
+</div>
+
 <div id="sid" class="sidenav" style="width:0;">
     <div class="right">
      <span onclick="closeNav()" class="glyphicon glyphicon-chevron-left"></span>
@@ -31,7 +41,7 @@
     </div>-->
 </div>
 
-<div class="topnav">
+<div onclick="searchL()" class="topnav">
         <div class="row2">
             <div class="column21">
                 <img class="logo" src="../static/yamo3.png" align="left"/>

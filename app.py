@@ -43,6 +43,10 @@ def organisationBeets():
     #db.deleteAllTask()
     
 @app.route("/")
+def main():
+    return redirect(url_for('albumy'))
+
+@app.route("/albums")
 def albumy():
     allTables=db.returnAllTable()
     alphabets=babl.sortAlfabets(allTables)
