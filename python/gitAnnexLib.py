@@ -110,14 +110,72 @@ class Repo:
 			return 1
 
 
-	#@todo git annex sync
 
-if __name__ == "__main__":
-	x = Repo('.', 1)
-	x.init()
-	y = Repo('./pykpyk', 1)
-	y.init()
-	x.annex_init()
-	x.annex_add('.')
-	x.connect_remotes(y, 'usbdrive', 'beetslocal') 
+	"""
+	#Wywołuje git annex whereis <path>, czyli
+	#szuka repozytoriów, w których występuje plik <path>
+	#zwraca liste repozytoriow, lub 0 gdy nie znaleziono pliku
+	##sciezka skracana jest o sciezke repozytorium
+	"""
+	def annex_whereis(self, path):
+		remotes = []
+		containsPath = path.find(self.path)
+		if containsPath>=0:
+			path = path[len(self.path)+1:]
+		
+		p = Popen(['git','annex', 'whereis', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+		p.stdout.readline()		
+		for cmdAnswer in p.stdout:
+			cmdAnswer = cmdAnswer.decode('UTF-8')[:-1]
+			index = cmdAnswer.rfind('[')
+			index2 = cmdAnswer.rfind(']')
+			if index>0 and index2>0:
+				remotes.append(cmdAnswer[index+1:index2])
+		
+		if remotes == []: return 0
+		return remotes
+		
+	"""
+	#Wywołuje git annex sync w self.path
+	#0 - no errors, 1 - error
+	"""
+	def annex_sync(self):
+		p = Popen(['git','annex', 'sync'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+		cmdAnswer = p.stderr.readline().decode('UTF-8')
+		if cmdAnswer == '':
+			return 0
+		else:
+			if self.logs == 1: print(cmdAnswer)			
+			return 1
+
+	"""
+	Wywołuje git annex get w celu pobrania plikow ktore nie znajduja sie w repozytorium
+	#1 - brak bledu, lub 0 - blad
+	#@TODO zwracanie listy plikow
+	"""
+	def annex_get(self):
+		files = []
+		p = Popen(['git','annex', 'get'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+		cmdAnswer = p.stderr.readline().decode('UTF-8')
+		if cmdAnswer != '': 
+			if self.logs==1: print(cmdAnswer)
+			return 1
+		for cmdAnswer in p.stdout.readline():
+			print(cmdAnswer)
+		return 0
+
+	"""
+	#return w przypadku ponizszych 3 funkcji zostanie dopisany w razie potrzeby
+	"""
+
+	def annex_unlock(self):
+		p = Popen(['git','annex', 'unlock'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+		
+	def annex_direct(self):
+		p = Popen(['git','annex', 'direct'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+
+	def annex_indirect(self):
+		p = Popen(['git','annex', 'indirect'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+
+
 	
