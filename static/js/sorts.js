@@ -1,4 +1,12 @@
 function switching(id1,id2){
+    if(document.getElementById('searching').style.display=='block'){
+        document.getElementById('searching').style.display='none';
+        document.getElementById("local").style.width = "0px";
+        document.getElementById("local2").style.width = "20px";
+        input = document.getElementById("myInput");
+        input.value="";
+        returnAlbArt();
+    }
     var ids=['0','1','2'];
     var td = document.getElementById(id1);
     if(!td.classList.contains('active')){
@@ -30,7 +38,16 @@ function change(check,id){
     document.getElementById(check).classList.add("active");
     document.getElementById(id+check).style.display='block';
 }
-
+function returnAlbArt(){
+        table = document.getElementById("rows");
+        tr = table.getElementsByTagName("a");
+        for (i = 0; i < tr.length; i++) {
+            ida=tr[i].id;
+            if(document.getElementById("dd"+ida).style.display=='none'){
+                    document.getElementById("dd"+ida).style.display='block';
+            } 
+        }
+}
 function sortAlb(spanId){
     var box=document.getElementById('box');
     var list=document.getElementById('list');

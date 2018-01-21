@@ -1,8 +1,9 @@
 class Letters(object):
-    def __init__(self,letter,artist=[],path=[]):
+    def __init__(self,letter,artist=[],path=[],ids=[]):
         self.letter=letter
         self.artist=artist
         self.path=path
+        self.ids=ids
         
 class tempClass(object):
      def __init__(self,art=None,path=[]):
@@ -46,16 +47,19 @@ def sortArt(items,art):
     for i in range(len(listletter)):
         tempart=[]
         temppath=[]
+        tempids=[]
         for j in range(len(artists)):
             tmp=artists[j].art
             if(listletter[i]==tmp[:1]):
                 tempart.append(tmp)
                 temppath.append(onePath(j,artists))
+                tempids.append(items[j][4])
             elif(tmp=='' and listletter[i]=='N'):
                 tempart.append(tmp)
                 temppath.append(onePath(j,artists))
+                tempids.append(items[j][4])
             
-        arts.append(Letters(listletter[i],tempart,temppath))
+        arts.append(Letters(listletter[i],tempart,temppath,tempids))
     return arts
    
             

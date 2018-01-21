@@ -175,8 +175,9 @@ label {
 }
 .logo{
     width: 120px;
-    height: 60px;
-    padding-bottom: 10px;
+    height: 40px;
+    padding-top:10px;
+    padding-left:10px;
 }
 .column22 .search-container button:hover {
     background: #ccc;

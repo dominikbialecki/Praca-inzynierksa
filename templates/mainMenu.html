@@ -1,17 +1,19 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<div id="sid2" class="sidenav2">
+<div id="sid2" class="sidenav2" style="display:block">
     <span onclick="openNav()" class="glyphicon glyphicon-chevron-right"></span>
 </div>
 
-<div id="local2" class="slh">
+<div id="local2" class="slh" style="display:block">
     <span onclick="openNavSL()" class="glyphicon glyphicon-chevron-left"></span>
 </div>
 
 <div id="local" class="sls" style="width:0;">
     <span onclick="closeNavSL()" class="glyphicon glyphicon-chevron-right"></span>
-    <input type="text" id="myInput" placeholder="Search">
+    <input type="text" onkeyup="searchLocal();" id="myInput" placeholder="Search">
+    <i class="glyphicon glyphicon-search colores"></i>
+    </input>
 </div>
 
 <div id="sid" class="sidenav" style="width:0;">
@@ -40,16 +42,23 @@
     </div>
     </div>-->
 </div>
+<div id="sidSearch" class="sidenav3" style="width:0;">
+    <p>Dane</p>
+</div>
 
-<div onclick="searchL()" class="topnav">
+<div id="searchMenu" class="main3 animate" style="display: none;">
+    <p>Searching</p>
+</div>
+<div class="topnav">
         <div class="row2">
             <div class="column21">
                 <img class="logo" src="../static/yamo3.png" align="left"/>
             </div>
             <div class="column22">
                 <div class="search-container">
-                    <input type="text" placeholder="Search.." name="search"/>
-                    <button type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    <input type="text" onkeyup="searchGlobal();" id="myInput2" placeholder="Search">
+                        <i class="glyphicon glyphicon-search colores"></i>
+                    </input>
                 </div>
             </div>
         

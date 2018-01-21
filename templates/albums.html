@@ -8,8 +8,8 @@
         <a href="/files_editions">Edycja plików</a>-->
 {% endblock %}
 {% block head %}
-<div class="column2 pointer">
-            <span id="list" onclick="switching(this.id,'box','0')" class="glyphicon glyphicon-th-list" value="0"></span>
+<div id="boxed" class="column2 pointer" style="display:block">
+            <span id="list" onclick="switching(this.id,'box','0')" class="glyphicon glyphicon-th-list"></span>
             <span id="box" onclick="switching(this.id,'list')" class="glyphicon glyphicon-th active" ></span>
             <div class="dropdown">
                 <span class="glyphicon glyphicon-option-vertical"></span>
@@ -27,26 +27,26 @@
 {% block content_body %}
 
 
-<div id="alb" class="main2">
+<div id="menu1" class="main2" style="display: block;">
 	
     <div id="box0" class="container" style="display: block;">
-        <div class="row">
+        <div id="rows2" class="row">
             {% for i in range(alphabets|length) %}
                 {% for j in range(alphabets[i].path|length) %}
                     {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
                         <div class="col-md-2 col-sm-4">
                             <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                            <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
                         </div>
                         {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
                             <div class="col-md-2 col-sm-4">
                                 <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                                <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
                             </div>
                         {% else %}
                             <div class="col-md-2 col-sm-4">
                             <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                            <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
                         </div>
                         {% endif %}
                 {% endfor %}
@@ -80,23 +80,23 @@
     </div>
         -->
     <div id="box1" class="container" style="display: none;">
-        <div class="row">
+        <div id="rows2" class="row">
             {% for i in range(artists|length) %}
                 {% for j in range(artists[i].path|length) %}
                     {% if artists[i].path[j] == 'brak' and artists[i].album[j]==''%}
                         <div class="col-md-2 col-sm-4">
                             <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
                         </div>
                         {% elif artists[i].album[j]!='' and artists[i].path[j] == 'brak' %}
                             <div class="col-md-2 col-sm-4">
                                 <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                                <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
                             </div>
                         {% else %}
                             <div class="col-md-2 col-sm-4">
                             <div class="dummy"><img class="my_pages" src="{{artists[i].path[j]}}"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
                         </div>
                         {% endif %}
                 {% endfor %}
@@ -105,23 +105,23 @@
     </div>
         
     <div id="box2" class="container" style="display: none;">
-        <div class="row">
+        <div id="rows2" class="row">
             {% for i in range(years|length) %}
                 {% for j in range(years[i].path|length) %}
                     {% if years[i].path[j] == 'brak' and years[i].album[j]==''%}
                         <div class="col-md-2 col-sm-4">
                             <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                            <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
                         </div>
                         {% elif years[i].album[j]!='' and years[i].path[j] == 'brak' %}
                             <div class="col-md-2 col-sm-4">
                                 <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                                <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
                             </div>
                         {% else %}
                             <div class="col-md-2 col-sm-4">
                             <div class="dummy"><img class="my_pages" src="{{years[i].path[j]}}"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                            <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
                         </div>
                         {% endif %}
                 {% endfor %}
@@ -141,22 +141,22 @@
                         <tbody>
                             <tr>
                                 <td>
-                                  <div class="row">
+                                  <div id="rows2" class="row">
                                     {% for j in range(alphabets[i].path|length) %}
                                         {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
                                             <div class="col-md-2 col-sm-4">
                                                 <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                                                <a href="{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
                                             </div>
                                             {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
                                                 <div class="col-md-2 col-sm-4">
                                                     <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                    <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                                                    <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
                                                 </div>
                                             {% else %}
                                                 <div class="col-md-2 col-sm-4">
                                                 <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
-                                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                                                <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
                                             </div>
                                             {% endif %}
                                     {% endfor %}
@@ -219,22 +219,22 @@
                     <tbody>
                         <tr>
                             <td>
-                                <div class="row">
+                                <div id="rows2" class="row">
                                 {% for j in range(artists[i].path|length) %}
                                     {% if artists[i].path[j] == 'brak' and artists[i].album[j]==''%}
                                         <div class="col-md-2 col-sm-4">
                                             <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
                                         </div>
                                         {% elif artists[i].album[j]!='' and artists[i].path[j] == 'brak' %}
                                             <div class="col-md-2 col-sm-4">
                                                 <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                                                <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
                                             </div>
                                         {% else %}
                                             <div class="col-md-2 col-sm-4">
                                             <div class="dummy"><img class="my_pages" src="{{artists[i].path[j]}}"/></div>
-                                            <a href="#x" id="lines" class="thumbnail purple">{{artists[i].album[j]}}</a>
+                                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
                                         </div>
                                         {% endif %}
                                 {% endfor %}
@@ -258,22 +258,22 @@
                     <tbody>
                             <tr>
                                 <td>
-                                    <div class="row">
+                                    <div id="rows2" class="row">
                                     {% for j in range(years[i].path|length) %}
                                         {% if years[i].path[j] == 'brak' and years[i].album[j]==''%}
                                             <div class="col-md-2 col-sm-4">
                                                 <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
+                                                <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
                                             </div>
                                             {% elif years[i].album[j]!='' and years[i].path[j] == 'brak' %}
                                                 <div class="col-md-2 col-sm-4">
                                                     <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                    <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                                                    <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
                                                 </div>
                                             {% else %}
                                                 <div class="col-md-2 col-sm-4">
                                                 <div class="dummy"><img class="my_pages" src="{{years[i].path[j]}}"/></div>
-                                                <a href="#x" id="lines" class="thumbnail purple">{{years[i].album[j]}}</a>
+                                                <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
                                             </div>
                                             {% endif %}
                                     {% endfor %}
@@ -285,6 +285,30 @@
         {% endfor %}
     </div>
         
+    <div id="searching" class="container" style="display: none;">
+        <div id="rows" class="row">
+            {% for i in range(alphabets|length) %}
+                {% for j in range(alphabets[i].path|length) %}
+                    {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
+                        <div id="dd{{alphabets[i].ids[j]}}" class="col-md-2 col-sm-4" style="display: block;">
+                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                            <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
+                        </div>
+                        {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
+                            <div  id="dd{{alphabets[i].ids[j]}}" class="col-md-2 col-sm-4" style="display: block;">
+                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                                <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                            </div>
+                        {% else %}
+                            <div id="dd{{alphabets[i].ids[j]}}"  class="col-md-2 col-sm-4" style="display: block;">
+                            <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
+                            <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
+                        </div>
+                        {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
 {% endblock %}
