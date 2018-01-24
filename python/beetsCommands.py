@@ -1,10 +1,74 @@
 from beets.library import Library
 from unidecode import unidecode
 from subprocess import PIPE, Popen
-import os
+from beets.library import PathType
+from os import path
+from shutil import copy2
+from inspect import getfile, currentframe
+
+
+
+
+
+
+"""
+#Klasa album przechowuje ['artpath'] jako objekt PathType
+#PathType.format(path) konwertuje path do stringa
+#Funkcja napisana aby kod był przejrzystszy
+"""
+def path_to_str(path):
+    pathconverter = PathType()
+    return pathconverter.format(path)
+
+def get_str_paths(albums):
+    str_paths = []
+    for album in albums:
+        str_paths.append(path_to_str(album.artpath))
+    return str_paths
+
+"""
+Na wejściu wprowadzadź obiekt biblioteki
+#Funkcja kopiuje okładki albumów do folderu ./static/images,
+#a następnie nadpisuje album.artpath każdego albumu biblioteki 
+#do formatu html-friendly (../static/images)
+#Zwraca 0 gdy nie napotka błędów. Else zwraca liste niepoprawnych artpath
+"""
+def correctPaths(object):
+    nonepath = '../static/images/image-not-found.jpg'
+    imagespath=path.dirname(path.abspath(getfile(currentframe())))
+    imagespath=imagespath[:-7] #takes 'python/' away
+    failed = []
+    albums = object.albums()
+    for album in albums:
+        newCoverPath = "/static/images/cover"+str(album.id)+".jpg"
+        artpath = album.artpath
+        artpath = path_to_str(artpath)
+        if artpath == 'None':
+            album.artpath = nonepath
+        elif artpath == nonepath:
+            pass
+        elif artpath[0:3] == '../':
+            pass
+        else:
+            if path.exists(artpath):
+                copy2(artpath, imagespath+newCoverPath)
+                album.artpath = '..'+newCoverPath
+            else:
+                failed.append(artpath)
+                pass
+    for album in albums:
+        album.store()
+
+    if failed==[]:
+        return 0
+    else:
+        return failed
+
+
+
 
 def getLibPath():
-	"""	
+	"""
 	#ponieważ config.yaml na różnych systemach znajduje sie w różnych miejscach, 
 	#lepiej wywolac beet config niz bezposrednio otwierac plik open('/home/dominik/.config/beets/config.yaml', 'r')
 	"""
@@ -13,8 +77,8 @@ def getLibPath():
 		line = line.decode('UTF-8')[:-1]
 		if "library: " in line:
 			line = line[9:]
-			if not os.path.exists(line):			#w przypadku gdy ścieżka podana jest z użyciem '~/'
-				line = os.path.expanduser(line)
+			if not path.exists(line):			#w przypadku gdy ścieżka podana jest z użyciem '~/'
+				line = path.expanduser(line)
 			return line
 
 
@@ -34,66 +98,37 @@ def beetImport(path='.', logs=0):
 		#wyświetla id albumu
 		a = Popen(['beet', 'list', album, '-a', '-f', '$id'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1) 
 		for id in a.stdout:
-			albumsId.append(id.decode('UTF-8')[:-1])
+			albumsId.append(int(id.decode('UTF-8')[:-1]))
 	if logs == 1: print(albumsId)
 	return albumsId
 
 
+"""
+Funkcja napisana aby ułatwić HTMLowi wyświetlanie obrazu
+Album.artpath przechowywane jest jako obiekt klasy PathType
+pack_albums() przyjmuje jako atrybut liste albumów,
+z każdego wyciąga artpath, konwertuje go do stringa i
+tworzy podlisty [album,ścieżka]. Zwracana jest lista podlist.
+
+#W przyszlosci rozbudowane zostanie o liste zdalnych repozytoriow
+"""
+def pack_albums(albums):
+    str_paths = get_str_paths(albums)
+    albums_packed = []
+    for i, album in enumerate(albums):
+        pack = [album, str_paths[i]]
+        albums_packed.append(pack)
+    return albums_packed
 
 
-def returnAlbums():
-    song = getLibPath()
-    lib=Library(song)
-    items=lib.albums()
-    tempalb=[]
-    tempart=[]
-    temppath=[]
-    tempyear=[]
-    alls=[]
-    for item in items:
-        tempalb.append(str(item['album']))
-        tempart.append(str(item['albumartist']))
-        temp2=unidecode(str(item['artpath']))
-        if(temp2!='None'):
-            temppath.append(temp2[2:-1])
-        else:
-            temppath.append('None')
-        tempyear.append(item['year'])
-        
-    for i in range(len(tempalb)):
-        alls.append([tempalb[i],tempart[i],temppath[i],tempyear[i]])
-    return alls 
-
-def toTime(length):
-    i=0;
-    l=int(length)
-    while l>60:
-        l-=60
-        i+=1
-    if(l<10):
-        return str(i)+":0"+str(l)
-    else:
-        return str(i)+":"+str(l)
-    
-def returnTitles():
-    song = getLibPath()
-    lib=Library(song)
-    items=lib.items()
-    temptitle=[]
-    tempalbum=[]
-    tempartist=[]
-    tempyear=[]
-    tempgenre=[]
-    temptime=[]
-    alls=[]
-    for item in items:
-        temptitle.append(item['title'])
-        tempalbum.append(item['album'])
-        tempartist.append(item['artist'])
-        tempyear.append(item['year'])
-        tempgenre.append(item['genre'])
-        temptime.append(toTime(item['length']))
-    for i in range(len(temptitle)):
-        alls.append([temptitle[i],tempartist[i],tempalbum[i],tempgenre[i],tempyear[i],temptime[i]])
-    return alls
-
+"""
+To samo co pack_albums ale zwraca liste podlist [album, ścieżka, items]
+"""
+def pack_albums_items(albums):
+    str_paths = get_str_paths(albums)
+    items_packed = []
+    for i, album in enumerate(albums):
+        items = album.items()
+        pack = [album, str_paths[i], items]
+        items_packed.append(pack)
+    return items_packed

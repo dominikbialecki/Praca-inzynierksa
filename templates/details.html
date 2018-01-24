@@ -1,0 +1,63 @@
+{% extends "mainMenu.html" %}
+
+{% block content %}
+<a href="/">Albumy</a>
+<a href="/artists">Artyści</a>
+<a href="/songs">Utwory</a>
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content_body %}
+
+
+    <form action="/edit-data" method="post">
+        {% for i in range(details|length) %}
+            <img src={{ details[i][1] }} alt="Album cover"> <br>
+            <table cass = "table">
+                <tr>
+                    <td> album: </td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].album }}' /></td>
+                </tr>
+                <tr>
+                    <td> wykonawca: </td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].albumartist }}' /></td>
+                </tr>
+                <tr>
+                    <td> rok wydania: </td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].year }}' /></td>
+                </tr>
+                <tr>
+                    <td>wytwórnia:</td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].label }}' /></td>
+                </tr>
+            </table>
+
+            <table class="table">
+                <tr>
+                    <th>id</th>
+                    <th>tytuł</th>
+                    <th>artysta</th>
+                    <th>rodzaj</th>
+                    <th>czas[s] </th>
+                </tr>
+        <!-- tytuł, artysta, rodzaj, czas trwania-->
+                {% for item in details[i][2] %}
+                <tr>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.id }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.title }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.artist }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.genre }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.comments }}' /></td>
+                   <!-- <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.length|int }}' /></td>-->
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+        <button type="submit">Zapisz zmiany</button>
+    </form>
+
+
+
+{% endblock %}
