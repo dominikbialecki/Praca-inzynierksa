@@ -1,7 +1,7 @@
 class english:
 
     item = [
-        'Id',
+        'ID',
         'Path',
         #'album_id',
         'Title',
@@ -60,13 +60,13 @@ class english:
         #'bitdepth',
         'Channels',
         #'mtime',
-        'Added'
+        #'Added'
     ]
 
     album = [
-        'Id',
+        'ID',
         'Art path',
-        'Added',
+        #'Added',
         'Artist',
         #'albumartist_sort',
         #'albumartist_credit',

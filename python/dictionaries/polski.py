@@ -2,9 +2,9 @@ class polish:
 
 
     album = [
-        'Id albumu',
+        'ID albumu',
         'Lokalizacja okładki',
-        'Dodano',
+        #'Dodano',
         'Artysta',
         #'Artyści',
         #'Credits',
@@ -15,7 +15,7 @@ class polish:
         'Dzien',
         'Ilość dysków',
         # 'comp',
-        # 'Music Brains Id',
+        # 'Music Brains ID',
         # 'Music Brains Artist',
         'Typ',
         'Wytwórnia',
@@ -36,7 +36,7 @@ class polish:
     ]
 
     item = [
-        'Id',
+        'ID',
         'Lokalizacja',
         #'album_id',
         'Tytuł',
@@ -95,5 +95,5 @@ class polish:
         #'bitdepth',
         'Kanały',
         #'mtime',
-        'Dodano'
+        #'Dodano'
     ]

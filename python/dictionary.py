@@ -5,7 +5,7 @@ from python.dictionaries.english import *
 class dictionary:
     def __init__(self, object):
         self.language_album = object.album
-        self.language_items = object.keys
+        self.language_item = object.item
 
     item_keys = [
         'id',
@@ -67,13 +67,13 @@ class dictionary:
         #'bitdepth',
         'channels',
         #'mtime',
-        'added'
+        #'added'
     ]
 
     album_keys = [
         'id',
         'artpath',
-        'added',
+        #'added',
         'albumartist',
         #'albumartist_sort',
         #'albumartist_credit',

@@ -41,13 +41,17 @@ def get_covers(object):
     for album in albums:
         albumpath = path_to_str(album.path)
         album.artpath = nonepath
+        newCoverPath = "/static/images/cover" + str(album.id) + ".jpg"
         if path.exists(albumpath + '/cover.jpg'):
-            newCoverPath = "/static/images/cover" + str(album.id) + ".jpg"
             artpath = albumpath + '/cover.jpg'
             if path.exists(imagespath+newCoverPath):
                 remove(imagespath+newCoverPath)
             copy2(artpath, imagespath+newCoverPath)
             album.artpath = '..'+newCoverPath
+        else:
+            if path.exists(imagespath+newCoverPath):
+                album.artpath = '..'+newCoverPath
+
         album.store()
 
 

@@ -13,13 +13,14 @@ def main():
 
 @app.route('/details')
 def details():
+    dict = dictionary.dictionary(dictionary.polish)
     albums_id = request.args.getlist('id',type=int)
     albums = []
     for album_id in albums_id:
         albums.append(lib.get_album(album_id))
     details = beetsCommands.pack_albums_items(albums)
 
-    return render_template('details.html', details=details)
+    return render_template('expandeddetails.html', details=details, dictionary=dict)
 
 @app.route('/edit-data')
 def edit_data():
@@ -75,5 +76,4 @@ if __name__ == "__main__":
 
     lib = Library(beetsCommands.getLibPath())
     beetsCommands.get_covers(lib)
-    dict = dictionary.dictionary(dictionary.polish)
     app.run(debug=True, use_reloader=True)
