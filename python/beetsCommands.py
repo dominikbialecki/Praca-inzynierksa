@@ -2,8 +2,8 @@ from beets.library import Library
 from unidecode import unidecode
 from subprocess import PIPE, Popen
 from beets.library import PathType
-from os import path
-from shutil import copy2
+from os import path, remove
+from shutil import copy2, rmtree
 from inspect import getfile, currentframe
 
 
@@ -37,32 +37,19 @@ def correctPaths(object):
     nonepath = '../static/images/image-not-found.jpg'
     imagespath=path.dirname(path.abspath(getfile(currentframe())))
     imagespath=imagespath[:-7] #takes 'python/' away
-    failed = []
     albums = object.albums()
     for album in albums:
-        newCoverPath = "/static/images/cover"+str(album.id)+".jpg"
-        artpath = album.artpath
-        artpath = path_to_str(artpath)
-        if artpath == 'None':
-            album.artpath = nonepath
-        elif artpath == nonepath:
-            pass
-        elif artpath[0:3] == '../':
-            pass
-        else:
-            if path.exists(artpath):
-                copy2(artpath, imagespath+newCoverPath)
-                album.artpath = '..'+newCoverPath
-            else:
-                failed.append(artpath)
-                pass
-    for album in albums:
+        albumpath = path_to_str(album.path)
+        album.artpath = nonepath
+        if path.exists(albumpath + '/cover.jpg'):
+            newCoverPath = "/static/images/cover" + str(album.id) + ".jpg"
+            artpath = albumpath + '/cover.jpg'
+            if path.exists(imagespath+newCoverPath):
+                remove(imagespath+newCoverPath)
+            copy2(artpath, imagespath+newCoverPath)
+            album.artpath = '..'+newCoverPath
         album.store()
 
-    if failed==[]:
-        return 0
-    else:
-        return failed
 
 
 

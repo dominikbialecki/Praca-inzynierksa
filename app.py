@@ -52,12 +52,15 @@ def startImporting():
 @app.route("/albums")
 def albumy():
     albums = lib.albums()
+    for album in albums:
+        album.load()
     alb_sort_album = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.album))
     alb_sort_artist = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.albumartist))
     alb_sort_year = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.year))
+    for album in alb_sort_album:
+        print(album[1])
 
     return render_template('albums.html',albums=alb_sort_album, artists=alb_sort_artist, years=alb_sort_year)
-
 
 @app.route("/artists")
 def artysci():

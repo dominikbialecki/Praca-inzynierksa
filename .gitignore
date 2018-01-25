@@ -2,3 +2,4 @@ __pycache__
 python/__pycache__
 database/yamo.db
 static/images
+.idea
