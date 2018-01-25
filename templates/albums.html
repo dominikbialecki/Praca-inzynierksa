@@ -32,7 +32,11 @@
             {% for i in range(albums|length) %}
                         <div class="col-md-2 col-sm-4">
                             <div class="dummy"><img class="my_pages" src={{ albums[i][1] }}/></div>
-                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="thumbnail purple">{{ albums[i][0].album }}</a>
+                            {% if albums[i][0].album == '' %}
+                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="thumbnail purple">Nieznany album</a>
+                            {% else %}
+                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="thumbnail purple">{{ albums[i][0].album  }}</a>
+                            {% endif %}
                         </div>
             {% endfor %}
         </div>

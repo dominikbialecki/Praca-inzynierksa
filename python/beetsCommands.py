@@ -119,7 +119,9 @@ def pack_albums_items(albums):
     str_paths = get_str_paths(albums)
     items_packed = []
     for i, album in enumerate(albums):
-        items = album.items()
+        items = []
+        for item in album.items():
+            items.append(item)
         pack = [album, str_paths[i], items]
         items_packed.append(pack)
     return items_packed

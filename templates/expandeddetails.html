@@ -10,9 +10,10 @@
 {% endblock %}
 
 {% block content_body %}
-
+    {% set detailslen = details|length %}
     {% set albkeylen = dictionary.album_keys|length %}
     {% set itemkeylen = dictionary.item_keys|length %}
+
     <form action="/edit-data" method="post">
         {% for i in range(details|length) %}
             <img src={{ details[i][1] }} alt="Album cover"> <br>
@@ -27,19 +28,20 @@
 
             <table class="table">
                 <tr>
-                    <th>id</th>
-                    <th>tytuł</th>
-                    <th>artysta</th>
-                    <th>rodzaj</th>
-                    <th>czas[s] </th>
+                {% for k in range(itemkeylen) %}
+                    <td> {{ dictionary.language_item[k] }} </td>
+                {% endfor %}
                 </tr>
-        <!-- tytuł, artysta, rodzaj, czas trwania-->
-                {% for j in range (itemkeylen) %}
+                {%for j in range(details[i][2]|length) %}
                 <tr>
-                    <td> {{ dictionary.language_item[j] }} </td>
-                    <td><input type="text"  name={{ (i*(albkeylen + itemkeylen)) + j + albkeylen }} value='{{ details[i][0][dictionary.item_keys[j]] }}' /></td>
+                    {% for k in range(itemkeylen) %}
+                        <td><input type="text"  name={{ (i*(albkeylen + itemkeylen * details[i][2]|length)) + albkeylen + (j * itemkeylen) +k }} value='{{ details[i][2][j][dictionary.item_keys[k]] }}' /></td>
+                    {% endfor %}
                 </tr>
                 {% endfor %}
+
+
+
             </table>
         {% endfor %}
         <button type="submit">Zapisz zmiany</button>
