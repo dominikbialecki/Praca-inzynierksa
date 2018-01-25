@@ -1,8 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request
 from beets.library import Library
 import python.beetsCommands as beetsCommands
-#from operator import itemgetter
-
+import python.dictionary as dictionary
 
 app = Flask(__name__)
 
@@ -46,7 +45,7 @@ def startImporting():
             album.load()
 
 
-        beetsCommands.correctPaths(lib)
+        beetsCommands.get_covers(lib)
         return redirect('/albums')
 
 @app.route("/albums")
@@ -57,8 +56,7 @@ def albumy():
     alb_sort_album = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.album))
     alb_sort_artist = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.albumartist))
     alb_sort_year = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.year))
-    for album in alb_sort_album:
-        print(album[1])
+
 
     return render_template('albums.html',albums=alb_sort_album, artists=alb_sort_artist, years=alb_sort_year)
 
@@ -76,5 +74,6 @@ def muzyka():
 if __name__ == "__main__":
 
     lib = Library(beetsCommands.getLibPath())
-    beetsCommands.correctPaths(lib)
+    beetsCommands.get_covers(lib)
+    dict = dictionary.dictionary(dictionary.polish)
     app.run(debug=True, use_reloader=True)

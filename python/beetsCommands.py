@@ -33,7 +33,7 @@ Na wejściu wprowadzadź obiekt biblioteki
 #do formatu html-friendly (../static/images)
 #Zwraca 0 gdy nie napotka błędów. Else zwraca liste niepoprawnych artpath
 """
-def correctPaths(object):
+def get_covers(object):
     nonepath = '../static/images/image-not-found.jpg'
     imagespath=path.dirname(path.abspath(getfile(currentframe())))
     imagespath=imagespath[:-7] #takes 'python/' away
