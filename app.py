@@ -24,32 +24,50 @@ def details():
 
     return render_template('expandeddetails.html', details=details, dictionary=dict)
 
+
 @app.route('/edit-data', methods = ['GET', 'POST'])
 def edit_data():
     if request.method == 'POST':
         postvars = variabledecode.variable_decode(request.form, dict_char='_')
+
         albums_id = []
         items_id = []
-        for k in range(0, len(postvars), (len(dict.album_keys)+len(dict.item_keys))):
-            albums_id.append(postvars.get(str(k)))
-            items_id.append(postvars.get(str(k+len(dict.album_keys))))
-        print(albums_id)
-        print(items_id)
-        """
-        for singledata in data:
-            track = lib.get_item(singledata[0])
-            if track!=0:
-                track.title = singledata[1]
-                track.author = singledata[2]
-                track.album = singledata[3]
-                track.year = singledata[4]
-                album = lib.get_album(track)
-                print(track.try_write())
-                #track.move(basedir=bytes(path, 'utf-8'))
-            tracks.append(track)
-        if logs == 1: print('zaktualizowano dane\n')
-        """
-        return render_template('expandeddetails.html')
+        albums_newdata = []
+        items_newdata = []
+        items_id_grouped = []       #used to help count number of items
+        album_keys_number = len(dict.album_keys)
+        item_keys_number = len(dict.item_keys)
+        print(len(postvars))
+
+        while (len(albums_id)*(album_keys_number+len(items_id_grouped)*item_keys_number)) != len(postvars):
+            albums_number = len(albums_id)
+
+            album_keys_number = len(dict.album_keys)
+            item_keys_number = len(dict.item_keys)
+            album_len = albums_number * (album_keys_number + len(items_id) * item_keys_number)
+
+            album_newdata = []
+            for k in range(0, album_keys_number):
+                album_newdata.append(postvars.get(str(albums_number * album_len +k)))
+            albums_newdata.append(album_newdata)
+            albums_id.append(int(album_newdata[-1]))
+            album = lib.get_album(albums_id[-1])
+
+            album_items_id = []
+            for item in album.items():
+                album_items_id.append(item.id)
+                items_id_grouped.append(item.id)
+            items_id.append(album_items_id)
+
+            for k in range(0, len(album_items_id)):
+                item_newdata = []
+                for j in range(0, item_keys_number):
+                    item_newdata.append(postvars.get(str(albums_number * (album_keys_number + len(album_items_id) * item_keys_number) + album_keys_number + k * item_keys_number + j)))
+                items_newdata.append(item_newdata)
+
+
+        return redirect('/albums')
+        #return render_template('expandeddetails.html')
 
 @app.route("/import")
 def get_import_path():
@@ -78,9 +96,9 @@ def albumy():
     albums = lib.albums()
     for album in albums:
         album.load()
-    alb_sort_album = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.album))
-    alb_sort_artist = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.albumartist))
-    alb_sort_year = beetsCommands.pack_albums(sorted(albums, key=lambda x: x.year))
+    alb_sort_album = beetsCommands.pack_albums_items(sorted(albums, key=lambda x: x.album))
+    alb_sort_artist = beetsCommands.pack_albums_items(sorted(albums, key=lambda x: x.albumartist))
+    alb_sort_year = beetsCommands.pack_albums_items(sorted(albums, key=lambda x: x.year))
 
 
     return render_template('albums.html',albums=alb_sort_album, artists=alb_sort_artist, years=alb_sort_year)

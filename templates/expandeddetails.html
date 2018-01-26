@@ -21,7 +21,7 @@
                 {% for j in range(albkeylen) %}
                     <tr>
                         <td> {{ dictionary.language_album[j] }} </td>
-                        <td><input type="text"  name={{ (i*(albkeylen + itemkeylen))+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' /></td>
+                        <td><input type="text"  name={{ (i*(albkeylen + details[i][2]|length * itemkeylen))+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' /></td>
                     </tr>
                 {% endfor %}
             </table>
