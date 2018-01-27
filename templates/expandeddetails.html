@@ -21,7 +21,7 @@
                 {% for j in range(albkeylen) %}
                     <tr>
                         <td> {{ dictionary.language_album[j] }} </td>
-                        <td><input type="text"  name={{ (i*(albkeylen + details[i][2]|length * itemkeylen))+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' /></td>
+                        <td><input type="text"  name={{ i*albkeylen + (details[i][3] - details[i][2]|length) * itemkeylen+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' /></td>
                     </tr>
                 {% endfor %}
             </table>
@@ -35,7 +35,7 @@
                 {%for j in range(details[i][2]|length) %}
                 <tr>
                     {% for k in range(itemkeylen) %}
-                        <td><input type="text"  name={{ (i*(albkeylen + itemkeylen * details[i][2]|length)) + albkeylen + (j * itemkeylen) +k }} value='{{ details[i][2][j][dictionary.item_keys[k]] }}' /></td>
+                        <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]] }}' /></td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
@@ -44,6 +44,7 @@
 
             </table>
         {% endfor %}
+
         <button type="submit">Zapisz zmiany</button>
     </form>
 

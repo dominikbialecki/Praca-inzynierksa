@@ -56,9 +56,22 @@ def get_covers(object):
 
 
 
+def get_library():
+	"""
+	#ponieważ config.yaml na różnych systemach znajduje sie w różnych miejscach,
+	#lepiej wywolac beet config niz bezposrednio otwierac plik open('/home/dominik/.config/beets/config.yaml', 'r')
+	"""
+	p = Popen(['beet','config'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+	for line in p.stdout:
+		line = line.decode('UTF-8')[:-1]
+		if "directory: " in line:
+			line = line[11:]
+			if not path.exists(line):			#w przypadku gdy ścieżka podana jest z użyciem '~/'
+				line = path.expanduser(line)
+			return line
 
 
-def getLibPath():
+def get_database():
 	"""
 	#ponieważ config.yaml na różnych systemach znajduje sie w różnych miejscach, 
 	#lepiej wywolac beet config niz bezposrednio otwierac plik open('/home/dominik/.config/beets/config.yaml', 'r')
@@ -113,15 +126,18 @@ def pack_albums(albums):
 
 
 """
-To samo co pack_albums ale zwraca liste podlist [album, ścieżka, items]
+To samo co pack_albums ale zwraca liste podlist [album, ścieżka, items, items_number_so_far]
 """
 def pack_albums_items(albums):
     str_paths = get_str_paths(albums)
     items_packed = []
+    items_count = []
     for i, album in enumerate(albums):
         items = []
         for item in album.items():
             items.append(item)
-        pack = [album, str_paths[i], items]
+            items_count.append(item)
+        pack = [album, str_paths[i], items, len(items_count)]
         items_packed.append(pack)
+
     return items_packed

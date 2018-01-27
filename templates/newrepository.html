@@ -1,0 +1,28 @@
+{% extends "mainMenu.html" %}
+{% block content %}
+	<label>TWOJA BIBLIOTEKA</label>
+	<a href="/albums">Albumy</a>
+	<a href="/artists">Artyści</a>
+	<a href="/years">Rok produkcji</a>
+	<a href="/songs">Muzyka</a>
+	<a class="active" href="/files_editions">Edycja plików</a>
+{% endblock %}
+{% block content_body %}
+<div class="main">
+	<br>
+	<br>
+	<br>
+    {% for i in range(warning|length) %}
+        <a>{{ warning[i] }}</a><br>
+    {% endfor %}
+	<br>
+	<a>Wprowadź pełną ścieżkę nowego repozytorium</a>
+    <br>
+
+	<form action="/createrepository" method="post">
+        <input type="text" name="Path"></input>
+        <input type="text" name="Name"></input>
+        <input type="submit" value="Dodaj"></input>
+	</form>
+</div>
+{% endblock %}
