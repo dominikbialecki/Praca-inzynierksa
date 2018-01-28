@@ -1,0 +1,355 @@
+h1 {
+    text-align: center;
+}
+
+h2{
+    margin-left: 5rem;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+label {
+    font-family: 'Arial Bold';
+    font-style: italic;
+    font-size: 18px;
+}
+.playlists{
+    margin-top:20%;
+    height: 30%;
+}
+
+.newPlaylist{
+    height: 30px;
+    margin-top:30%;
+}
+
+.wysrodkuj{
+    padding-left:40px;
+}
+
+.library label{
+    width: 240px;
+    text-align: center;
+}
+
+.editions{
+    color: white;
+    padding-left: 20px;
+}
+
+
+.sidenav {
+    height: 90%;
+    width: 280px;
+    position:fixed;
+    color:white;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    transition: 0.5s;
+    background: black;
+    overflow-x: hidden;
+}
+
+
+.sidenav a {
+    text-decoration: none;
+    font-size: 23px;
+    color: #818181;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.main {
+    margin-left: 240px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+.sidenav a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.my_pages{
+    width: 150px;
+    height:150px
+}
+
+#lines{
+    line-height: 0;
+}
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.main2 {
+    margin-top: 30px;
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 30px;
+}
+
+.topnav {
+    top: 0;
+    width:100%;
+    height:65px;
+    position: fixed;
+    overflow: hidden;
+    background-color: black;
+}
+
+.column2 {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+    height: 60px; /* Should be removed. Only for demonstration */
+}
+.column21 {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    height: 60px; /* Should be removed. Only for demonstration */
+}
+.column22 {
+    float: left;
+    width: 45%;
+    padding: 10px;
+    height: 60px; /* Should be removed. Only for demonstration */
+}
+.row2 {
+    width:100%;
+    content: "";
+    display: table;
+    clear: both;
+}
+/*.topnav a{
+    display: block;
+    color: #818181;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+*/
+.column22 input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+}
+
+.column22 .search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+.column22 .search-container button:hover {
+  background: #ccc;
+}
+.pointer span:hover {
+    color: #818181;
+}
+
+.pointer span.active {
+    color: white;
+}
+.pointer span{
+    padding-top:8px;
+    color: #696969;
+}
+.pointer{
+    font-size:32px;
+    padding-left:18%;
+}
+.logo{
+    width: 120px;
+    height: 40px;
+    padding-top:10px;
+    padding-left:10px;
+}
+.column22 .search-container button:hover {
+    background: #ccc;
+}
+.column22 .search-container{
+    float:left;
+}
+.dummy {
+    font-size: 12px;
+    margin-top: 20%;
+}
+.dummy2 {
+    font-size: 12px;
+    margin-bottom: 80px;
+}
+.thumbnail {
+    top: 5px;
+    bottom: 0;
+    left: 15px;
+    right: 0;
+    text-align:center;
+    font-size:18px;
+    color: black;
+    /*padding-top:calc(50% - 30px);*/
+}
+
+.main2 a:hover{
+     color: #818181;
+}
+
+.lead{
+    font-size:1.25rem;
+    font-weight:300
+}
+
+table {
+    padding: .75rem;
+    font-size: 18px;
+}
+td {
+    text-align: inherit;
+}
+#first{
+    width:15px;
+}
+
+#firsts{
+    font-size: 24px;
+    font-weight: bold;
+}
+#seconds{
+    padding-left: 40px;
+}
+
+.sidenav2 {
+    height: 50%;
+    width: 20px;
+    position:fixed;
+    bottom:0;
+}
+.sidenav .left{
+    text-align:center;
+    height: 100%;
+    width:230px;
+    left:0;
+    float:left;
+    padding-top: 20px;
+}
+
+.left .pos{
+    text-align:left;
+    padding-left: 20px;
+}
+.sidenav .right{
+    height: 100%;
+    float:right;
+    width:30px;
+    padding-top:250px;
+}
+
+/* dropdowns menus*/
+
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: fixed;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: fixed;
+    font-size:16px;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content span {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content span.active{
+    background: green;
+}
+/* Change color of dropdown links on hover */
+.dropdown-content span:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+hr {
+    display: block;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0; 
+}
+
+.main3 {
+    margin-top: 30px;
+    font-size: 28px;
+    padding-left: 10%;
+    padding-bottom:40px;
+}
+.table2{
+    border-spacing: 0;
+    width: 90%;
+    border: 1px solid #ddd;
+}
+
+.table2 th {
+    text-align: center;
+    padding: 2px;
+    width: 100px;
+}
+
+.table2 td {
+    text-align: left;
+    padding: 2px;
+    padding-left: 8px;
+    width: 100px;
+}
+.table2 tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.table2 span:hover{
+    color: #ccc;
+}
+.more2 br{
+    padding-top:100px;
+}
+

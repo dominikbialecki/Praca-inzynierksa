@@ -1,28 +1,92 @@
 {% extends "mainMenu.html" %}
 {% block content %}
-	<label>TWOJA BIBLIOTEKA</label>
-	<a href="/albums">Albumy</a>
-	<a href="/artists">Artyści</a>
-	<a href="/years">Rok produkcji</a>
-	<a href="/songs">Muzyka</a>
-	<a class="active" href="/files_editions">Edycja plików</a>
+    <label>TWOJA BIBLIOTEKA</label>
+        <a href="/albums">Albumy</a>
+        <a href="/artists">Artyści</a>
+        <a href="/years">Rok produkcji</a>
+        <a href="/songs">Muzyka</a>
+        <a class="active" href="/files_editions">Edycja plików</a>
 {% endblock %}
 {% block content_body %}
-<div class="main">
-	<br>
-	<br>
-	<br>
-    {% for i in range(warning|length) %}
-        <a>{{ warning[i] }}</a><br>
-    {% endfor %}
-	<br>
-	<a>Wprowadź pełną ścieżkę nowego repozytorium</a>
-    <br>
+    <div class="main">
+        <br>
+        <br>
+        <br>
+            <form action="/repositories?action=add" method="post">
+                <table class="table">
+                    <tr>
+                    {% for i in range(warning|length) %}
+                        <td><font color="red">{{ warning[i] }}</font><br></td>
+                    {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><a>Pełna ścieżka nowego repozytorium</a></td>
+                        <td><a>Nazwa repozytorium</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="path" value=""></input></td>
+                        <td><input type="text" name="remote_name" value=""></input></td>
+                        <td><input type="submit" value="Dodaj"></input></td>
+                    </tr>
+                    </table>
+                    <table class="sync">
+                    <tr>
+                        <td></td>
+                        <td>Automatycznie</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="get" value="1" checked>
+                         <a>Pobierz muzykę z nowego repozytorium</a></td>
+                        <td><input type="checkbox" name="autoget" value="1"></td>
 
-	<form action="/createrepository" method="post">
-        <input type="text" name="Path"></input>
-        <input type="text" name="Name"></input>
-        <input type="submit" value="Dodaj"></input>
-	</form>
-</div>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="push" value="1">
+                        <a>Wyślij muzykę na nowe repozytorium</a></td>
+                        <td><input type="checkbox" name="autopush" value="1"></td>
+                    </tr>
+                    </table>
+            </form>
+        <table class="repostable">
+            <br>
+            <br>
+
+            <form action="/repositories?action=action" method="post">
+                <tr>
+                    <td><input type="checkbox" name="remember" value="remember">Zautomatyzuj</td>
+                </tr>
+                <tr>
+                    <td>Nazwa</td>
+                    <td>Ścieżka</td>
+                    <td>Automatyczne pobieranie</td>
+                    <td>Automatyczne wysyłanie</td>
+                </tr>
+                {% for category in range(repos_packed|length) %}
+                    {% for i in range(repos_packed[category]|length) %}
+                        <tr>
+                                <td>{{ repos_packed[category][i].name }}</td>
+                                <td>{{ repos_packed[category][i].path }}</td>
+                                {% if category == 0 or category == 1 %}
+                                <td>tak</td>
+                                {% else %}
+                                <td>nie</td>
+                                {% endif %}
+                                {% if category == 0 or category == 2 %}
+                                <td>tak</td>
+                                {% else %}
+                                <td>nie</td>
+                                {% endif %}
+                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Pobierz"></input></td>
+                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Wyślij"></input></td>
+
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </form>
+
+
+
+
+    </div>
 {% endblock %}

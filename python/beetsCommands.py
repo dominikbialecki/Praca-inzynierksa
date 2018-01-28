@@ -8,6 +8,8 @@ from inspect import getfile, currentframe
 
 
 
+def reset_beets():
+    remove(path.expanduser('~/.config/beets/state.pickle'))
 
 
 
@@ -25,7 +27,10 @@ def get_str_paths(albums):
     for album in albums:
         str_paths.append(path_to_str(album.artpath))
     return str_paths
-
+def get_server_path():
+    serverpath = path.dirname(path.abspath(getfile(currentframe())))
+    serverpath = serverpath[:-7]  # takes 'python/' away
+    return serverpath
 """
 Na wejściu wprowadzadź obiekt biblioteki
 #Funkcja kopiuje okładki albumów do folderu ./static/images,
@@ -33,26 +38,25 @@ Na wejściu wprowadzadź obiekt biblioteki
 #do formatu html-friendly (../static/images)
 #Zwraca 0 gdy nie napotka błędów. Else zwraca liste niepoprawnych artpath
 """
-def get_covers(object):
+def get_covers(albumlist):
     nonepath = '../static/images/image-not-found.jpg'
-    imagespath=path.dirname(path.abspath(getfile(currentframe())))
-    imagespath=imagespath[:-7] #takes 'python/' away
-    albums = object.albums()
-    for album in albums:
+    paths = []
+    imagespath = get_server_path()
+    for album in albumlist:
         albumpath = path_to_str(album.path)
-        album.artpath = nonepath
         newCoverPath = "/static/images/cover" + str(album.id) + ".jpg"
         if path.exists(albumpath + '/cover.jpg'):
             artpath = albumpath + '/cover.jpg'
             if path.exists(imagespath+newCoverPath):
                 remove(imagespath+newCoverPath)
             copy2(artpath, imagespath+newCoverPath)
-            album.artpath = '..'+newCoverPath
+            paths.append('..'+newCoverPath)
+        elif path.exists(imagespath+newCoverPath):
+            paths.append('..'+newCoverPath)
         else:
-            if path.exists(imagespath+newCoverPath):
-                album.artpath = '..'+newCoverPath
+            paths.append(nonepath)
 
-        album.store()
+    return paths
 
 
 
@@ -90,14 +94,13 @@ def get_database():
 def beetImport(path='.', logs=0):
 	#lista id nowo dodanych albumow
 	albumsId = [] 						
-	p = Popen(['beet','import', path, '-A'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+	p = Popen(['beet','import', path, '-A', '-P', '-i'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 	if logs == 1: print('wykonano import\nsciezki zaimportowanych plikow:')
 	albumPath = []	
 	for line in p.stderr:					
 		#zapisywanie ścieżek albumów do listy. ścieżki typu byte
 		albumPath.append(line.decode('UTF-8')[:-1])
 		if logs == 1: print(line.decode('UTF-8')[:-1])
-	
 	for album in albumPath:
 		#wyświetla id albumu
 		a = Popen(['beet', 'list', album, '-a', '-f', '$id'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1) 
@@ -117,10 +120,10 @@ tworzy podlisty [album,ścieżka]. Zwracana jest lista podlist.
 #W przyszlosci rozbudowane zostanie o liste zdalnych repozytoriow
 """
 def pack_albums(albums):
-    str_paths = get_str_paths(albums)
+    paths = get_covers(albums)
     albums_packed = []
     for i, album in enumerate(albums):
-        pack = [album, str_paths[i]]
+        pack = [album, paths[i]]
         albums_packed.append(pack)
     return albums_packed
 
@@ -129,7 +132,7 @@ def pack_albums(albums):
 To samo co pack_albums ale zwraca liste podlist [album, ścieżka, items, items_number_so_far]
 """
 def pack_albums_items(albums):
-    str_paths = get_str_paths(albums)
+    paths = get_covers(albums)
     items_packed = []
     items_count = []
     for i, album in enumerate(albums):
@@ -137,7 +140,7 @@ def pack_albums_items(albums):
         for item in album.items():
             items.append(item)
             items_count.append(item)
-        pack = [album, str_paths[i], items, len(items_count)]
+        pack = [album, paths[i], items, len(items_count)]
         items_packed.append(pack)
 
     return items_packed

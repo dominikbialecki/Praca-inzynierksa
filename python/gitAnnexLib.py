@@ -1,25 +1,72 @@
 from subprocess import PIPE, Popen, check_output
+import python.beetsCommands as beetsCommands
 
 
-class repo:
+autopush_log = beetsCommands.get_server_path()+'/static/remote_repos/autopush'
 
-    def __init__(self, path='.', logs = 1):
+autoget_log = beetsCommands.get_server_path()+'/static/remote_repos/autoget'
+
+
+class Repo:
+
+    def __init__(self, name='YAMO_local', path='.', local=0, logs = 1):
+        self.name = name
         self.path = path
         self.logs = logs
         self.remotes = []
-        self.get_remotes()
-        self.annex_init()
+        self.remote_names = []
+        self.autogetting = []
+        self.autopushing = []
+        if local == 1:
+            self.annex_init()
+            self.get_remotes()
+
+
+
+
+    def get_names(self, list):
+        names = []
+        for remote in list:
+            names.append(remote.name)
+        return names
+
 
 
     """
     Wywołuje git remote w lokalizacji self.path aby pobrać listę zdalnych repozytoriów.
     """
     def get_remotes(self):
-        p = Popen(['git', 'remote'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+        self.remotes = []
+        self.autogetting = []
+        self.autopushing = []
+
+        p = Popen(['git', 'remote', '-v'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+        remote_names = []
+        remote_paths = []
+        autopushing_names = self.get_autopushing_names()
+        autogetting_names = self.get_autogetting_names()
         for remote in p.stdout:
-            remoteStr = remote.decode('UTF-8')[:-1]
-            if remoteStr not in self.remotes:
-                self.remotes.append(remoteStr)
+            remote_str = remote.decode('UTF-8')[:-1]
+            find_tab = remote_str.find('\t')
+            if find_tab:
+                remote_name = (remote_str[:find_tab])
+                if remote_name not in remote_names:
+                    remote_names.append(remote_name)
+                    find_bracket = remote_str.rfind('(')
+                    if find_bracket:
+                        remote_paths.append(remote_str[find_tab+1:find_bracket-1])
+
+        current_remotes = self.get_names(self.remotes)
+        for i, remote_name in enumerate(remote_names):
+            if remote_name not in current_remotes:
+                new_remote = Repo(remote_names[i], remote_paths[i])
+                self.remotes.append(new_remote)
+                self.remote_names.append(remote_name)
+                if remote_name in autopushing_names:
+                    self.autopushing.append(new_remote)
+                if remote_name in autogetting_names:
+                    self.autogetting.append(new_remote)
+
         return self.remotes
 
     """
@@ -61,18 +108,19 @@ class repo:
     Funkcja wywołuje git remote add <name> <path> w lokalizacji, w której znajduje się repozytorium self.
     0 - success. 1 - fail
     """
-    def remote_add(self, name, object):
-        if name not in self.remotes:
-            self.remotes.append(name)
-        p = Popen(['git','remote', 'add', name, object.path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
-        cmdErr = p.stderr.readline().decode('UTF-8')
-        cmdAnswer = p.stdout.readline().decode('UTF-8')
-        if (cmdAnswer[:-1] == '') & (cmdErr == ''):
-            if self.logs == 1: print('Remote '+ name + ' successfuly added')
-            return 0
-        else:
-            if self.logs == 1: print(cmdErr)
-            return 1
+    def remote_add(self, object):
+        name = object.name
+        if name not in self.remote_names:
+            p = Popen(['git','remote', 'add', name, object.path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+            cmdErr = p.stderr.readline().decode('UTF-8')
+            cmdAnswer = p.stdout.readline().decode('UTF-8')
+            if (cmdAnswer[:-1] == '') & (cmdErr == ''):
+                if self.logs == 1: print('Remote '+ name + ' successfuly added')
+                self.remotes.append(object)
+                self.remote_names.append(name)
+                return 0
+        return 1
+
 
     """
     Dwustronne łączenie repozytoriów.
@@ -80,9 +128,10 @@ class repo:
     localName - nazwa repozytorium lokalnego w repozytorium zdalnym
     0 - succes, 1 - fail
     """
-    def connect_remotes(self, object, remoteName, localName):
-        if (self.remote_add(remoteName, object)) or (object.remote_add(localName, self)):
-            if self.logs == 1: print('connecting failed')
+    def connect_remotes(self, object):
+        if (self.remote_add(object)) or (object.remote_add(self)):
+            if self.logs == 1:
+                print('connecting failed')
             return 1
         else:
             return 0
@@ -93,6 +142,7 @@ class repo:
     #@TODO dodawanie kilku plikow naraz
 
     def annex_add(self, path='.'):
+        print('git annex add '+path)
         addedFiles = []
         p = Popen(['git','annex', 'add', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
         for line in p.stdout:
@@ -103,6 +153,7 @@ class repo:
                 break
             else:
                 addedFiles.append(cmdAnswer[4:-3])
+        print()
         return addedFiles
 
 
@@ -146,38 +197,126 @@ class repo:
     #0 - no errors, 1 - error
     """
     def annex_sync(self, remote):
-        p = Popen(['git','annex', 'sync', remote], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
-        cmdAnswer = p.stderr.readline().decode('UTF-8')
-        if cmdAnswer == '':
-            return 0
-        else:
-            if self.logs == 1: print(cmdAnswer)
-            return 1
+        print('git annex sync '+remote.name)
+        p = Popen(['git','annex', 'sync', remote.name], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+
+        for line in p.stderr:
+            print(line.decode('UTF-8')[:-1])
+        print()
+        return 0
 
     """
     Wywołuje git annex get w celu pobrania plikow ktore nie znajduja sie w repozytorium
     #1 - brak bledu, lub 0 - blad
     #@TODO zwracanie listy plikow
     """
-    def annex_get(self):
-        p = Popen(['git', 'annex', 'get'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
-        cmdAnswer = p.stderr.readline().decode('UTF-8')
-        if cmdAnswer != '':
-            if self.logs == 1: print(cmdAnswer)
-            return 1
-        for cmdAnswer in p.stdout.readline():
-            print(cmdAnswer)
-        return 0
+    def annex_get(self, source, path='.'):
+        print('git annex get -f '+source.name+' '+path)
+        p = Popen(['git', 'annex', 'get', '-f', source.name, path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+
+        for line in p.stderr:
+            print(line.decode('UTF-8')[-1])
+        for cmdanswer in p.stdout.readline():
+            print(cmdanswer)
+        print()
 
     """
     #return w przypadku ponizszych 3 funkcji zostanie dopisany w razie potrzeby
     """
 
-    def annex_unlock(self):
-        Popen(['git', 'annex', 'unlock'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+    def annex_unlock(self, path='.'):
+        Popen(['git', 'annex', 'unlock', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
     def annex_direct(self):
         Popen(['git', 'annex', 'direct'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
     def annex_indirect(self):
         Popen(['git', 'annex', 'indirect'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+
+
+    def get_autopushing_names(self):
+        names = []
+        try:
+            f = open(autopush_log, mode='r')
+            for remotename in f:
+                remotename = remotename[:-1]
+                if remotename != '':
+                    if remotename not in self.autopushing:
+                        names.append(str(remotename))
+            f.close()
+            return names
+        except:
+            return []
+
+
+
+
+    def add_autopushing(self, repo):
+        if repo not in self.autopushing:
+            try:
+                f = open(autopush_log, mode='a+')
+                f.write(repo.name+'\n')
+                f.close()
+                self.autopushing.append(repo)
+
+
+
+                return 0
+            except:
+                return 1
+
+
+    def get_autogetting_names(self):
+        names = []
+        try:
+            f = open(autoget_log, mode='r')
+            for remotename in f:
+                remotename = remotename[:-1]
+                if remotename != '':
+                    if remotename not in self.autopushing:
+                        names.append(str(remotename))
+            f.close()
+            return names
+        except:
+            return []
+
+
+    def add_autogetting(self, repo):
+        if repo not in self.autogetting:
+            try:
+                f = open(autoget_log, mode='a+')
+                f.write(repo.name+'\n')
+                f.close()
+                self.autogetting.append(repo)
+
+                return 0
+            except:
+                return 1
+
+
+
+    def get_from(self, repo):
+        self.annex_indirect()
+        repo.annex_indirect()
+        repo.annex_add()
+        repo.annex_sync(self)
+        self.annex_sync(repo)
+        self.annex_get(repo)
+
+
+def create_repository(local_repo, path, name, checkbox_values):
+    local_repo.annex_init()
+    # checkbox_names = ['autopush', 'autoget', 'push', 'get']
+    new_repo = Repo(name, path, logs=1)
+    local_repo.connect_remotes(new_repo)
+    if checkbox_values[0]:
+        local_repo.add_autopushing(new_repo)
+        new_repo.get_from(local_repo)
+        print(local_repo.get_names(local_repo.autopushing))
+    elif checkbox_values[2]:
+        new_repo.get_from(local_repo)
+    if checkbox_values[1]:
+        print(local_repo.add_autogetting(new_repo))
+        local_repo.get_from(new_repo)
+    elif checkbox_values[3]:
+        local_repo.get_from(new_repo)
