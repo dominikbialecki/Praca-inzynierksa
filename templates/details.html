@@ -49,8 +49,11 @@
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.title }}' /></td>
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.artist }}' /></td>
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.genre }}' /></td>
-                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.comments }}' /></td>
-                   <!-- <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.length|int }}' /></td>-->
+                    {% if item.length|int % 60 < 10 %}
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ (item.length|int / 60)|int }}:0{{item.length|int % 60}}' /></td>
+                    {% else %}
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ (item.length|int / 60)|int }}:{{item.length|int % 60}}' /></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </table>
@@ -58,6 +61,9 @@
         <button type="submit">Zapisz zmiany</button>
     </form>
 
+    <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
+        <button type="submit">Pokaż szczegóły</button>
+    </form>
 
 
 {% endblock %}

@@ -225,14 +225,25 @@ class Repo:
     """
 
     def annex_unlock(self, path='.'):
-        Popen(['git', 'annex', 'unlock', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+        p = Popen(['git', 'annex', 'unlock', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
     def annex_direct(self):
-        Popen(['git', 'annex', 'direct'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+        p = Popen(['git', 'annex', 'direct'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+        for line in p.stdout:
+            line = line.decode('UTF-8')[:-1]
+            print(line)
+        for line in p.stderr:
+            line = line.decode('UTF-8')[:-1]
+            print(line)
 
     def annex_indirect(self):
-        Popen(['git', 'annex', 'indirect'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
-
+        p = Popen(['git', 'annex', 'indirect'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+        for line in p.stdout:
+            line = line.decode('UTF-8')[:-1]
+            print(line)
+        for line in p.stderr:
+            line = line.decode('UTF-8')[:-1]
+            print(line)
 
     def get_autopushing_names(self):
         names = []

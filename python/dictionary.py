@@ -1,5 +1,7 @@
 from python.dictionaries.polski import *
 from python.dictionaries.english import *
+from python.dictionaries.polish_short import *
+from python.dictionaries.english_short import *
 
 
 class dictionary:
@@ -73,13 +75,13 @@ class dictionary:
     album_keys = [
         'album',
         'albumartist',
-        'genre',
+        'year',
         'label',
+        'genre',
         'country',
         'disctotal',
         #'day',
         #'month',
-        'year',
         'albumtype',
         'albumstatus',
         'id',

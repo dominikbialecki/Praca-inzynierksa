@@ -1,9 +1,8 @@
-class polish:
+class PolishShort:
 
     def __init__(self):
         self.album = album
         self.item = item
-
 
 album = [
     'Nazwa',
@@ -12,11 +11,11 @@ album = [
     'Wytwórnia',
     'Gatunek',
     'Kraj',
-    'Ilość dysków',
+    #'Ilość dysków',
     #'Dzien',
     #'Miesiac',
-    'Typ',
-    'Status',
+    # 'Typ',
+    # 'Status',
     'ID albumu',
     # 'Lokalizacja okładki',
     # 'Język',
@@ -51,13 +50,13 @@ item = [
     # 'Dzień',
     # 'Miesiąc',
     # 'Rok',
-    'Dysk',
-    'Format',
-    'Bitrate',
-    'Częstotliwość',
-    'Kanały',
-    'Lokalizacja',
-    'ID',
+    # 'Dysk',
+    # 'Format',
+    # 'Bitrate',
+    # 'Częstotliwość',
+    # 'Kanały',
+    # 'Lokalizacja',
+    # 'ID',
     # 'Artyści',
     # 'artist_credit',
     # 'Album',
@@ -100,4 +99,4 @@ item = [
     # 'bitdepth',
     # 'mtime',
     # 'Dodano'
-]
+    ]
