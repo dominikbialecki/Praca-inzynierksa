@@ -27,10 +27,14 @@ def get_str_paths(albums):
     for album in albums:
         str_paths.append(path_to_str(album.artpath))
     return str_paths
+
+
 def get_server_path():
     serverpath = path.dirname(path.abspath(getfile(currentframe())))
     serverpath = serverpath[:-7]  # takes 'python/' away
     return serverpath
+
+
 """
 Na wejściu wprowadzadź obiekt biblioteki
 #Funkcja kopiuje okładki albumów do folderu ./static/images,
@@ -43,16 +47,16 @@ def get_covers(albumlist):
     paths = []
     imagespath = get_server_path()
     for album in albumlist:
-        albumpath = path_to_str(album.path)
+        album_art_path = path_to_str(album.artpath)
         newCoverPath = "/static/images/cover" + str(album.id) + ".jpg"
-        if path.exists(albumpath + '/cover.jpg'):
-            artpath = albumpath + '/cover.jpg'
+        if path.exists(album_art_path + '/cover.jpg'):
+            artpath = album_art_path + '/cover.jpg'
             if path.exists(imagespath+newCoverPath):
                 remove(imagespath+newCoverPath)
             copy2(artpath, imagespath+newCoverPath)
             paths.append('..'+newCoverPath)
-        elif path.exists(imagespath+newCoverPath):
-            paths.append('..'+newCoverPath)
+        # elif path.exists(imagespath+newCoverPath):
+        #     paths.append('..'+newCoverPath)
         else:
             paths.append(nonepath)
 

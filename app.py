@@ -18,39 +18,83 @@ def main():
 
 @app.route('/details', methods = ['GET', 'POST'])
 def details():
-
     polish = dictionary.polish()
     dict = dictionary.dictionary(polish)
     albums_id = request.args.getlist('id',type=int)
     action = request.args.getlist('action', type=str)
     expand = request.args.get('expand', type=str)
+    saved = request.args.get('remotes', type=str)
     albums = []
     id_arg = ''
+    local_repo.get_remotes()
+    if saved == 'saved':
+        if request.method == 'POST':
+            for album_id in albums_id:
+                album_dir = beetsCommands.path_to_str(lib.get_album(album_id).item_dir())
+                album_dir = album_dir[len(beetsCommands.get_library()) + 1:]
+                postvars = variabledecode.variable_decode(request.form, dict_char='_')
+                keys = postvars.keys()
+                for repo in local_repo.remotes:
+                    if repo.name not in keys:
+                        local_repo.annex_sync(repo)
+                        repo.annex_sync(local_repo)
+                        repo.annex_drop(album_dir)
+                        repo.annex_sync(local_repo)
+                        local_repo.annex_sync(repo)
+                    else:
+                        local_repo.annex_sync(repo)
+                        repo.annex_sync(local_repo)
+                        repo.annex_get(local_repo, album_dir)
+                        repo.annex_sync(local_repo)
+                        local_repo.annex_sync(repo)
+
+                if 'YAMO' not in postvars.keys():
+                    local_repo.annex_drop(album_dir)
+                else:
+                    local_repo.annex_get_from_all(album_dir)
+
+    remote_names = local_repo.remote_names
+    print(remote_names)
+    remotes_send = []
     for album_id in albums_id:
         if id_arg != '':
             id_arg = id_arg + '&'
         id_arg = id_arg+'id='+str(album_id)
-        print(id_arg)
         albums.append(lib.get_album(album_id))
+        items = albums[-1].items()
+        album_dir = beetsCommands.path_to_str(beetsCommands.path_to_str(items[0].path))
+        if album_dir:
+            album_dir = album_dir[len(beetsCommands.get_library()) + 1:]
+            remotes_send.append(local_repo.annex_whereis(album_dir))
+
+    if 'YAMO' not in remote_names:
+        remote_names.append('YAMO')
+
+    remote_names_copy = []
+    for name in remote_names:
+        if name not in remotes_send[0]:
+            remote_names_copy.append(name)
+    print(remote_names_copy)
+    remotes_send.append(remote_names_copy)
+
     details = beetsCommands.pack_albums_items(albums)
 
     if expand == 'true':
-
         if 'edit' in action:
             return edit_data(id_arg, dict, expand)
         else:
-            return render_template('expandeddetails.html', details=details, dictionary=dict, id_arg=id_arg, expanded=expand)
+            return render_template('expandeddetails.html', details=details, dictionary=dict, id_arg=id_arg, expanded=expand, remotes=remotes_send)
 
     polish_short = dictionary.PolishShort()
     dict_short = dictionary.dictionary(polish_short)
     if 'edit' in action:
-        return edit_data(id_arg, dict_short, expand)
+        return edit_data(id_arg, dict_short, expand, remotes_send)
 
 
-    return render_template('expandeddetails.html', details=details, dictionary=dict_short, id_arg=id_arg, expanded=expand)
+    return render_template('expandeddetails.html', details=details, dictionary=dict_short, id_arg=id_arg, expanded=expand, remotes=remotes_send)
 
 
-def edit_data(id_arg, dict, expand):
+def edit_data(id_arg, dict, expand, remotes_send):
     if request.method == 'POST':
 
         postvars = variabledecode.variable_decode(request.form, dict_char='_')
@@ -134,13 +178,12 @@ def edit_data(id_arg, dict, expand):
                 if k == 1:
                     print(item[item_key])
             albums[a].try_sync(write=True,move=False)
-        print(local_repo.name)
         local_repo.annex_indirect()                                     # commits changes and goes back to indirect mode
 
 
         details = beetsCommands.pack_albums_items(albums)
 
-        return render_template('expandeddetails.html', details=details, dictionary=dict, id_arg=id_arg, expanded=expand)
+        return render_template('expandeddetails.html', details=details, dictionary=dict, id_arg=id_arg, expanded=expand, remotes=remotes_send)
 
 @app.route("/import")
 def get_import_path():
@@ -179,79 +222,75 @@ def import_to_beets(path, first=0):
 def repositories():
     local_repo.get_remotes()
     action = request.args.get('action', type=str)
-    print(action)
+
     if request.method == 'POST':
         postvars = variabledecode.variable_decode(request.form, dict_char='_')
-        if action == 'add':
-            path = request.form['path']
-            path = os.path.expanduser(path)
-            name = request.form['remote_name']
-            return repositories_add_remote(path, name, postvars)
-        elif action == 'action':
-            return repositories_action(postvars)
-    warning = []
+        repositories_action(postvars)                               #get, send, change settings
+
+        path = request.form['path']
+        path = os.path.expanduser(path)
+        name = request.form['remote_name']
+        if path and name:
+            return repositories_add_remote(path, name)
+
+
     repos_packed = pack_remotes(local_repo)
 
-    return render_template('newrepository.html', warning=warning, local_repo=local_repo, repos_packed=repos_packed)
+    return render_template('newrepository.html', local_repo=local_repo, repos_packed=repos_packed)
 
 
 def repositories_action(postvars):
-    warning = []
-    print(postvars)
-    remember = []
-    if str(postvars.get('remember')) == 'remember':
-        remember.append(1)
+    remember_get, get, remember_send, send, drop = ([] for i in range(5))
+
     for key in postvars:
-        if str(postvars.get(key)) == 'Pobierz':
-            remote_name = str(key)
-            for repo in local_repo.remotes:
-                if repo.name == remote_name:
-                    if len(remember) != 0:
-                        local_repo.add_autogetting(repo)
-                    print("----------START GETTING----------")
-                    local_repo.get_from(repo)
-                    import_to_beets(local_repo.path, first=1)
-
-        if str(postvars.get(key)) == 'Wyślij':
-            remote_name = str(key)
-            for repo in local_repo.remotes:
-                if repo.name == remote_name:
-                    if len(remember) != 0:
-                        local_repo.add_autopushing(repo)
-                    print("----------START SENDING----------")
-                    repo.get_from(local_repo)
-                    import_to_beets(local_repo.path, first=1)
-
-
-    repos_packed = pack_remotes(local_repo)
-    return render_template('newrepository.html', warning=warning, local_repo=local_repo, repos_packed=repos_packed)
-
-
-
-def repositories_add_remote(path, name, postvars):
-    # getting input
-    warning = []
-    checkbox_names = ['autopush', 'autoget', 'push', 'get']
-    checkbox_values = []
-    for checkbox_name in checkbox_names:
-        if checkbox_name in postvars:
-            checkbox_values.append(int(postvars.get(checkbox_name)))
+        if str(postvars.get(key)) == 'remember':
+            key = str(key)
+            if key[-1] == 'g':
+                remember_get.append((key[:-1]))
+            elif key[-1] == 's':
+                remember_send.append(key[:-1])
+        elif str(postvars.get(key)) == 'Pobierz':
+            get.append(str(key))
+        elif str(postvars.get(key)) == 'Wyślij':
+            send.append(str(key))
+        elif str(postvars.get(key)) == 'Wyczyść':
+            drop.append(str(key))
+            print('--------------------', drop)
+    for repo in local_repo.remotes:
+        if repo.name in remember_get:
+            local_repo.add_autogetting(repo)
         else:
-            checkbox_values.append(0)
-    print(checkbox_values)
+            local_repo.drop_autogetting(repo)
+        if repo.name in remember_send:
+            local_repo.add_autopushing(repo)
+        else:
+            local_repo.drop_autopushing(repo)
+        if repo.name in send:
+            repo.get_from(local_repo)
+            import_to_beets(local_repo.path, first=1)
+        if repo.name in get:
+            local_repo.get_from(repo)
+            import_to_beets(local_repo.path, first=1)
+        if repo.name in drop:
+            local_repo.annex_sync(repo)
+            repo.annex_sync(local_repo)
+            repo.annex_drop()
+            repo.annex_sync(local_repo)
+            local_repo.annex_sync(repo)
 
+def repositories_add_remote(path, name):
+    warning = []
     # validation
 
     if not os.path.exists(path):
         warning.append('Ścieżka musi wskazywać na istniejący folder')
     if name in local_repo.remote_names:
-        if warning == [[]]:
+        if warning == []:
             warning.append([])
-        warning.append('Repozytorium o podanej nazwie już istnieje')
+        warning.append('Nazwa musi być unikalna')
 
-    print(warning)
     if warning == []:
-        gitAnnexLib.create_repository(local_repo, path, name, checkbox_values)
+        gitAnnexLib.create_repository(local_repo, path, name)
 
     repos_packed = pack_remotes(local_repo)
 
@@ -275,7 +314,7 @@ def pack_remotes(repository):
         else:
             repo_manual.append(repo)
 
-    repos_packed = [repo_fullsync, repo_autoget, repo_autopush, repo_manual]
+    repos_packed = [repo_manual, repo_autoget, repo_autopush, repo_fullsync]
     return repos_packed
 
 @app.route("/reset")
