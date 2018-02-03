@@ -77,11 +77,13 @@ def details():
     print(remote_names_copy)
     remotes_send.append(remote_names_copy)
 
+    local_repo.annex_direct()
     details = beetsCommands.pack_albums_items(albums)
+    local_repo.annex_indirect()
 
     if expand == 'true':
         if 'edit' in action:
-            return edit_data(id_arg, dict, expand)
+            return edit_data(id_arg, dict, expand, remotes_send)
         else:
             return render_template('expandeddetails.html', details=details, dictionary=dict, id_arg=id_arg, expanded=expand, remotes=remotes_send)
 
@@ -98,7 +100,8 @@ def edit_data(id_arg, dict, expand, remotes_send):
     if request.method == 'POST':
 
         postvars = variabledecode.variable_decode(request.form, dict_char='_')
-
+        for key in postvars:
+            print('key:',key, 'valueL', postvars.get(key))
         albums_id = []
         items_id = []
         albums_newdata = []
@@ -106,7 +109,7 @@ def edit_data(id_arg, dict, expand, remotes_send):
         items_id_grouped = []       #used to help count number of items
         album_keys_number = len(dict.language_album)
         item_keys_number = len(dict.language_item)
-
+        #while (len(albums_id) * album_keys_number + len(items_id_grouped) * item_keys_number) != len(postvars):
         while (len(albums_id)*album_keys_number+len(items_id_grouped)*item_keys_number) != len(postvars):
             albums_number = len(albums_id)
 
@@ -117,6 +120,7 @@ def edit_data(id_arg, dict, expand, remotes_send):
             for k in range(0, album_keys_number):
                 album_newdata.append(postvars.get(str(current_len + k)))
             albums_newdata.append(album_newdata)
+            print(album_newdata)
             albums_id.append(int(album_newdata[-1]))
             album = lib.get_album(albums_id[-1])
 
@@ -134,7 +138,7 @@ def edit_data(id_arg, dict, expand, remotes_send):
 
                 album_items_newdata.append(item_newdata)
             items_newdata.append(album_items_newdata)
-
+            print(items_newdata)
         local_repo.annex_direct()                               # git annex direct mode, so beet can modify files
 
         albums = []
@@ -180,8 +184,9 @@ def edit_data(id_arg, dict, expand, remotes_send):
             albums[a].try_sync(write=True,move=False)
         local_repo.annex_indirect()                                     # commits changes and goes back to indirect mode
 
-
+        local_repo.annex_direct()
         details = beetsCommands.pack_albums_items(albums)
+        local_repo.annex_indirect()
 
         return render_template('expandeddetails.html', details=details, dictionary=dict, id_arg=id_arg, expanded=expand, remotes=remotes_send)
 
@@ -195,6 +200,7 @@ def startImporting():
     if request.method == 'POST':
         path = request.form['Path']
         import_to_beets(path, first=1)
+
 
         return redirect('/albums')
 
@@ -266,11 +272,20 @@ def repositories_action(postvars):
         else:
             local_repo.drop_autopushing(repo)
         if repo.name in send:
+            local_repo.annex_sync(repo)
             repo.get_from(local_repo)
+            repo.annex_sync(local_repo)
+            local_repo.annex_sync(repo)
+            local_repo.annex_indirect()
             import_to_beets(local_repo.path, first=1)
+            local_repo.annex_direct()
         if repo.name in get:
+            repo.annex_sync(local_repo)
             local_repo.get_from(repo)
+            local_repo.annex_sync(repo)
+            local_repo.annex_direct()
             import_to_beets(local_repo.path, first=1)
+            local_repo.annex_indirect()
         if repo.name in drop:
             local_repo.annex_sync(repo)
             repo.annex_sync(local_repo)
@@ -336,9 +351,11 @@ def albumy():
     albums = lib.albums()
     for album in albums:
         album.load()
+    local_repo.annex_direct()
     alb_sort_album = beetsCommands.pack_albums_items(sorted(albums, key=lambda x: x.album))
     alb_sort_artist = beetsCommands.pack_albums_items(sorted(albums, key=lambda x: x.albumartist))
     alb_sort_year = beetsCommands.pack_albums_items(sorted(albums, key=lambda x: x.year))
+    local_repo.annex_indirect()
 
 
     return render_template('albums.html',albums=alb_sort_album, artists=alb_sort_artist, years=alb_sort_year)
@@ -358,7 +375,9 @@ if __name__ == "__main__":
     print(beetsCommands.get_library())
     local_repo = gitAnnexLib.Repo(path=beetsCommands.get_library(), local=1)
     lib = Library(beetsCommands.get_database())
+    local_repo.annex_direct()
     import_to_beets(local_repo.path, first=1)
+    local_repo.annex_indirect()
     for autopush in local_repo.autopushing:
         autopush.get_from(local_repo)
     for autoget in local_repo.autogetting:

@@ -48,18 +48,14 @@ def get_covers(albumlist):
     imagespath = get_server_path()
     for album in albumlist:
         album_art_path = path_to_str(album.artpath)
-        newCoverPath = "/static/images/cover" + str(album.id) + ".jpg"
-        if path.exists(album_art_path + '/cover.jpg'):
-            artpath = album_art_path + '/cover.jpg'
+        if path.exists(album_art_path):
+            newCoverPath = "/static/images/cover" + str(album.id) + ".jpg"
             if path.exists(imagespath+newCoverPath):
                 remove(imagespath+newCoverPath)
-            copy2(artpath, imagespath+newCoverPath)
+            copy2(album_art_path, imagespath+newCoverPath)
             paths.append('..'+newCoverPath)
-        # elif path.exists(imagespath+newCoverPath):
-        #     paths.append('..'+newCoverPath)
         else:
             paths.append(nonepath)
-
     return paths
 
 
@@ -97,17 +93,17 @@ def get_database():
 
 def beetImport(path='.', logs=0):
 	#lista id nowo dodanych albumow
-	albumsId = [] 						
-	p = Popen(['beet','import', path, '-A', '-P', '-i'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+	albumsId = []
+	p = Popen(['beet','import', path, '-A', '-P', '-i', 'c'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 	if logs == 1: print('wykonano import\nsciezki zaimportowanych plikow:')
-	albumPath = []	
-	for line in p.stderr:					
+	albumPath = []
+	for line in p.stderr:
 		#zapisywanie ścieżek albumów do listy. ścieżki typu byte
 		albumPath.append(line.decode('UTF-8')[:-1])
 		if logs == 1: print(line.decode('UTF-8')[:-1])
 	for album in albumPath:
 		#wyświetla id albumu
-		a = Popen(['beet', 'list', album, '-a', '-f', '$id'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1) 
+		a = Popen(['beet', 'list', album, '-a', '-f', '$id'], stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 		for id in a.stdout:
 			albumsId.append(int(id.decode('UTF-8')[:-1]))
 	if logs == 1: print(albumsId)

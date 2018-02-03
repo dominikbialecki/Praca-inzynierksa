@@ -214,8 +214,7 @@ class Repo:
     """
     def annex_get(self, source, path='.'):
         print('git annex get -f '+source.name+' '+path)
-        print(self.path, '-------------salefpath-')
-        p = Popen(['git', 'annex', 'get', '-f', source.name, path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(['git', 'annex', 'get', '-f', source.name, path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
         for line in p.stderr:
             print(line.decode('UTF-8')[-1])
@@ -225,8 +224,7 @@ class Repo:
 
     def annex_get_from_all(self, path='.'):
         print('git annex get  '+path)
-        print(self.path, '-------------salefpath-')
-        p = Popen(['git', 'annex', 'get', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(['git', 'annex', 'get', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
         for line in p.stderr:
             print(line.decode('UTF-8')[-1])
@@ -238,7 +236,7 @@ class Repo:
 
     def annex_drop(self, path='.'):
         print('git annex drop', path)
-        p = Popen(['git', 'annex', 'drop', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(['git', 'annex', 'drop', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
         for line in p.stderr:
             print(line.decode('UTF-8')[:-1])
