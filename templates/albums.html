@@ -11,9 +11,9 @@
             <div class="dropdown">
                 <span class="glyphicon glyphicon-option-vertical"></span>
                     <div class="dropdown-content">
-                        <span id="0" onclick="sortAlb(this.id);" class="active">A-Z</span>
-                        <span id="1" onclick="sortAlb(this.id);" class="">Artyści</span>
-                        <span id="2" onclick="sortAlb(this.id);" class="">Roku</span>
+                        <span id="0" onclick="sortAlb(this.id);" class="widthspan active">A-Z</span>
+                        <span id="1" onclick="sortAlb(this.id);" class="widthspan">Artyści</span>
+                        <span id="2" onclick="sortAlb(this.id);" class="widthspan">Roku</span>
                     </div>
             </div>
 </div>
@@ -21,6 +21,16 @@
 
 {% block content_body %}
 
+<div id="local2" class="slh" style="display:block">
+    <span onclick="openNavSL()" class="glyphicon glyphicon-chevron-left"></span>
+</div>
+
+<div id="local" class="sls" style="width:0;">
+    <span onclick="closeNavSL()" class="glyphicon glyphicon-chevron-right"></span>
+    <input type="text" onkeyup="searchLocal();" id="myInput" placeholder="Search">
+    <i class="glyphicon glyphicon-search colores"></i>
+    </input>
+</div>
 
 <div id="menu1" class="main2" style="display: block;">
 

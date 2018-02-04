@@ -1,15 +1,14 @@
 {% extends "mainMenu.html" %}
 
 {% block content %}
-    <label>TWOJA BIBLIOTEKA</label>
-        <a href="/albums">Albumy</a>
-        <a class="active" href="/repositories">Repozytoria</a>
-        <a class="glyphicon glyphicon-plus pos" href="/import">Dodaj muzykę</a>
+    <a href="/albums">Albumy</a>
+    <a class="active" href="/repositories">Repozytoria</a>
+    <a class="glyphicon glyphicon-plus pos" href="/import">Dodaj muzykę</a>
 
 {% endblock %}
 {% block content_body %}
 <form action="/repositories?action" method="post">
-    <div class="main">
+    <div class="main3">
         <br>
         <br>
         <br>
@@ -22,29 +21,30 @@
                     </tr>
                     <tr>
                         <td><a>Pełna ścieżka nowego repozytorium</a></td>
-                        <td><a>Nazwa</a></td>
+                        <td colspan="2"><a>Nazwa</a></td>
                     </tr>
                     <tr>
                         <td><input type="text" name="path" value=""></input></td>
                         <td><input type="text" name="remote_name" value=""></input></td>
-                        <td><input type="submit" value="Dodaj"></input></td>
+                        <td><button class="btn btn-lg btn-primary">
+                            <span class="glyphicon glyphicon-plus"></span>
+                                Dodaj
+                            </button></td>
                     </tr>
                     </table>
 
-
-        <table class="repostable">
-            <br>
-            <br>
-            <br>
-
-
-                <tr>
-                    <td rowspan="2">Nazwa</td>
-                    <td rowspan="2">Ścieżka</td>
-                    <td rowspan="2">Automatyczne<br>pobieranie</td>
-                    <td rowspan="2">Automatyczne<br> wysyłanie</td>
-                </tr>
-                <tr></tr>
+        <br>
+        <br>
+        <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <td rowspan="2">Nazwa</td>
+                        <td rowspan="2">Ścieżka</td>
+                        <td rowspan="2">Automatyczne<br>pobieranie</td>
+                        <td rowspan="2">Automatyczne<br> wysyłanie</td>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for category in range(repos_packed|length) %}
                     {% for i in range(repos_packed[category]|length) %}
                         <tr>
@@ -67,10 +67,11 @@
                         </tr>
                     {% endfor %}
                 {% endfor %}
+                </tbody>
             </table>
         <br>
         <br>
-        <input type="submit" value="Zapisz zmiany"></input>
+        <input type="submit" class="btn btn-lg btn-success" value="Zapisz zmiany"></input>
 </form>
 
 
