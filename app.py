@@ -54,7 +54,6 @@ def details():
                     local_repo.annex_get_from_all(album_dir)
 
     remote_names = local_repo.remote_names
-    print(remote_names)
     remotes_send = []
     for album_id in albums_id:
         if id_arg != '':
@@ -75,7 +74,6 @@ def details():
         if name not in remotes_send[0]:
             remote_names_copy.append(name)
     remotes_send.append(remote_names_copy)
-    print(remotes_send)
 
     local_repo.annex_direct()
     details = beetsCommands.pack_albums_items(albums)
@@ -100,8 +98,6 @@ def edit_data(id_arg, dict, expand, remotes_send):
     if request.method == 'POST':
 
         postvars = variabledecode.variable_decode(request.form, dict_char='_')
-        for key in postvars:
-            print('key:',key, 'valueL', postvars.get(key))
         albums_id = []
         items_id = []
         albums_newdata = []
@@ -118,17 +114,14 @@ def edit_data(id_arg, dict, expand, remotes_send):
             for k in range(0, album_keys_number):
                 album_newdata.append(postvars.get(str(current_len + k)))
             albums_newdata.append(album_newdata)
-            print(album_newdata)
-            albums_id.append(int(album_newdata[-1]))
+            albums_id.append(int(album_newdata[6]))
             album = lib.get_album(albums_id[-1])
-            if album == None: break
 
             album_items_id = []
             for item in album.items():
                 album_items_id.append(item.id)
                 items_id_grouped.append(item.id)
             items_id.append(album_items_id)
-
             album_items_newdata = []
             for k in range(0, len(album_items_id)):
                 item_newdata = []
@@ -137,7 +130,6 @@ def edit_data(id_arg, dict, expand, remotes_send):
 
                 album_items_newdata.append(item_newdata)
             items_newdata.append(album_items_newdata)
-            print(items_newdata)
         local_repo.annex_direct()                               # git annex direct mode, so beet can modify files
 
         albums = []
@@ -181,8 +173,6 @@ def edit_data(id_arg, dict, expand, remotes_send):
                         item[item_key] = str(items_newdata[a][i][k])
                         item['comments'] = 'edited'
                 item.try_sync(write=1, move=0)
-                if k == 1:
-                    print(item[item_key])
             albums[a].try_sync(write=True,move=False)
         local_repo.annex_indirect()                                     # commits changes and goes back to indirect mode
 
@@ -263,7 +253,6 @@ def repositories_action(postvars):
             send.append(str(key))
         elif str(postvars.get(key)) == 'Wyczyść':
             drop.append(str(key))
-            print('--------------------', drop)
     for repo in local_repo.remotes:
         if repo.name in remember_get:
             local_repo.add_autogetting(repo)
@@ -375,7 +364,6 @@ def muzyka():
 
 
 if __name__ == "__main__":
-    print(beetsCommands.get_library())
     local_repo = gitAnnexLib.Repo(path=beetsCommands.get_library(), local=1)
     lib = Library(beetsCommands.get_database())
     local_repo.annex_direct()
