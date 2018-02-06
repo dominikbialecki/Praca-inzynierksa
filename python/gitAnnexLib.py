@@ -138,7 +138,7 @@ class Repo:
 
     #Wywołanie git annex add <path> w lokalizacji self.path.
     #Zwraca listę dodanych plików
-    #@TODO dodawanie kilku plikow naraz
+
 
     def annex_add(self, path='.'):
         print('git annex add '+path)
@@ -202,15 +202,10 @@ class Repo:
         print('git annex sync '+remote.name)
         p = Popen(['git','annex', 'sync', remote.name], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
-        # for line in p.stderr:
-        #     print(line.decode('UTF-8')[:-1])
-        # print()
         return 0
 
     """
     Wywołuje git annex get w celu pobrania plikow ktore nie znajduja sie w repozytorium
-    #1 - brak bledu, lub 0 - blad
-    #@TODO zwracanie listy plikow
     """
     def annex_get(self, source, path='.'):
         print('git annex get -f '+source.name+' '+path)
@@ -247,30 +242,15 @@ class Repo:
         print('getting finished')
         return 0
 
-    """
-    #return w przypadku ponizszych 3 funkcji zostanie dopisany w razie potrzeby
-    """
 
     def annex_unlock(self, path='.'):
         p = Popen(['git', 'annex', 'unlock', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
 
     def annex_direct(self):
         p = Popen(['git', 'annex', 'direct'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
-        # for line in p.stdout:
-        #     line = line.decode('UTF-8')[:-1]
-        #     print(line)
-        # for line in p.stderr:
-        #     line = line.decode('UTF-8')[:-1]
-        #     print(line)
 
     def annex_indirect(self):
         p = Popen(['git', 'annex', 'indirect'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
-        # for line in p.stdout:
-        #     line = line.decode('UTF-8')[:-1]
-        #     print(line)
-        # for line in p.stderr:
-        #     line = line.decode('UTF-8')[:-1]
-        #     print(line)
 
     def get_autopushing_names(self):
         names = []

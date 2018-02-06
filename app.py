@@ -74,8 +74,8 @@ def details():
     for name in remote_names:
         if name not in remotes_send[0]:
             remote_names_copy.append(name)
-    print(remote_names_copy)
     remotes_send.append(remote_names_copy)
+    print(remotes_send)
 
     local_repo.annex_direct()
     details = beetsCommands.pack_albums_items(albums)
@@ -109,10 +109,8 @@ def edit_data(id_arg, dict, expand, remotes_send):
         items_id_grouped = []       #used to help count number of items
         album_keys_number = len(dict.language_album)
         item_keys_number = len(dict.language_item)
-        #while (len(albums_id) * album_keys_number + len(items_id_grouped) * item_keys_number) != len(postvars):
-        while (len(albums_id)*album_keys_number+len(items_id_grouped)*item_keys_number) != len(postvars):
+        while (len(albums_id) * album_keys_number + len(items_id_grouped) * item_keys_number) != len(postvars):
             albums_number = len(albums_id)
-
             album_keys_number = len(dict.language_album)
             item_keys_number = len(dict.language_item)
             current_len = albums_number * album_keys_number + len(items_id_grouped) * item_keys_number
@@ -123,6 +121,7 @@ def edit_data(id_arg, dict, expand, remotes_send):
             print(album_newdata)
             albums_id.append(int(album_newdata[-1]))
             album = lib.get_album(albums_id[-1])
+            if album == None: break
 
             album_items_id = []
             for item in album.items():
@@ -147,13 +146,16 @@ def edit_data(id_arg, dict, expand, remotes_send):
             albums.append(lib.get_album(album_id))              # getting single album
             for k in range(len(dict.language_album)):
                 album_key = dict.album_keys[k]
-                if album_key == 'id' or album_key == 'artpath':
+                if albums[a][album_key] == None:
+                    pass
+                elif album_key == 'id' or album_key == 'artpath':
                     pass
                 elif album_key == 'year':
                     if int(albums_newdata[a][k]) < 10000:
                         albums[a][album_key] = int(albums_newdata[a][k])
                     else:
                         pass
+
                 else:
                     albums[a][album_key] = str(albums_newdata[a][k])
 
@@ -227,7 +229,7 @@ def import_to_beets(path, first=0):
 @app.route('/repositories', methods=['POST', 'GET'])
 def repositories():
     local_repo.get_remotes()
-    action = request.args.get('action', type=str)
+
 
     if request.method == 'POST':
         postvars = variabledecode.variable_decode(request.form, dict_char='_')
@@ -276,11 +278,12 @@ def repositories_action(postvars):
             repo.get_from(local_repo)
             repo.annex_sync(local_repo)
             local_repo.annex_sync(repo)
-            local_repo.annex_indirect()
-            import_to_beets(local_repo.path, first=1)
             local_repo.annex_direct()
+            import_to_beets(local_repo.path, first=1)
+            local_repo.annex_indirect()
         if repo.name in get:
             repo.annex_sync(local_repo)
+            local_repo.annex_sync(repo)
             local_repo.get_from(repo)
             local_repo.annex_sync(repo)
             local_repo.annex_direct()

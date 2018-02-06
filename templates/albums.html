@@ -2,7 +2,7 @@
 {% block content %}
 <a class="active" href="/">Albumy</a>
 <a  href="/repositories">Repozytoria</a>
-<span onclick="openImport()" class="glyphicon glyphicon-plus mySpan">Dodaj muzykę</span>
+<a onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>
 {% endblock %}
 {% block head %}
 <div id="boxed" class="column2 pointer" style="display:block">
@@ -40,7 +40,11 @@
         <div id="rows2" class="row">
             {% for i in range(albums|length) %}
                         <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src={{ albums[i][1] }}/></div>
+                            {% if albums[i][2][0].comments == 'unedited' %}
+                            <div class="dummy"><img class="my_pages"  src={{ albums[i][1] }} id="unedited" /></div>
+                            {% else %}
+                            <div class="dummy"><img class="my_pages" src={{ albums[i][1] }} id="edited"/></div>
+                            {% endif %}
                             {% if albums[i][0].album == '' %}
                             <div class="wrapper">
                                 <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="text">Nieznany album</a></div>
@@ -178,7 +182,7 @@
                 {% for j in range(alphabets[i].path|length) %}
                     {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
                         <div id="dd{{alphabets[i].ids[j]}}" class="col-md-2 col-sm-4" style="display: block;">
-                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
+                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg" class="rounded"/></div>
                             <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="text">Nieznany album</a>
                         </div>
                         {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}

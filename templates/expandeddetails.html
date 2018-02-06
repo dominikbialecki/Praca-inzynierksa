@@ -3,7 +3,7 @@
 {% block content %}
         <a class="active" href="/">Albumy</a>
         <a  href="/repositories">Repozytoria</a>
-        <span onclick="openImport()" class="glyphicon glyphicon-plus mySpan">Dodaj muzykę</span>
+        <a onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>
 {% endblock %}
 
 {% block head %}
@@ -40,13 +40,14 @@
                 <label><input name="{{name}}" type="checkbox" checked><font color="green">{{name}}</font></label>
             {% endfor %}
             {% for name in remotes[1] %}
-                <label><input name="{{name}}" type="checkbox"><font color="yellow">{{name}}</font></label>
+                <label><input name="{{name}}" type="checkbox"><font color="grey">{{name}}</font></label>
             {% endfor %}
             <button class="btn btn-lg btn-primary" type="submit">Zapisz</button>
         </form>
     {% endif %}
-    <hr />
     <br>
+    <br>
+
     {% if expanded == 'true' %}
         <form action={{"/details?"+id_arg+"&expand=true&action=edit"}} method="post">
     {% else %}
@@ -54,19 +55,19 @@
     {% endif %}
             {% for i in range(details|length) %}
                 <div class="left-page">
-                    <img src={{ details[i][1] }} alt="Album cover" width="250px" height="250px"> <br>
+                    <img src={{ details[i][1] }} alt="Album cover" width="350px" height="350px"> <br>
                 </div>
                 <div class="right-page">
-                    <table>
+                    <table class="table table-dark table-sm">
                         {% for j in range(albkeylen) %}
                             <tr>
                                 <td> {{ dictionary.language_album[j] }} </td>
-                                <td><input type="text"  name={{ i*albkeylen + (details[i][3] - details[i][2]|length) * itemkeylen+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' /></td>
+                                <td><input type="text"  name={{ i*albkeylen + (details[i][3] - details[i][2]|length) * itemkeylen+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' style="width: 400px;"/></td>
                             </tr>
                         {% endfor %}
                     </table>
                 </div>
-                <table class="table center">
+                <table class="table table-dark center">
                     <tr>
                     {% for k in range(itemkeylen) %}
                         <td> {{ dictionary.language_item[k] }} </td>
@@ -78,11 +79,13 @@
                             {% if dictionary.item_keys[k] == 'path' %}
                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]].decode('UTF-8') }}'/></td>
                             {% elif dictionary.item_keys[k] == 'length' and details[i][2][j][dictionary.item_keys[k]]|int % 60 < 10 %}
-                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:0{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' style="width: 100px;"/></td>
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:0{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' style="width: 60px;"/></td>
                             {% elif dictionary.item_keys[k] == 'length' %}
-                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' readonly class="color-input" style="width: 100px;"/></td>
-                            {% elif dictionary.item_keys[k] == 'track' or dictionary.item_keys[k] == 'album_id' or dictionary.item_keys[k] == 'language'%}
-                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]]}} '  style="width: 60px;"/></td>
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' readonly class="color-input" style="width: 60px"/></td>
+                            {% elif dictionary.item_keys[k] == 'track' or dictionary.item_keys[k] == 'album_id' or dictionary.item_keys[k] == 'language' or dictionary.item_keys[k] == 'disc' or dictionary.item_keys[k] == 'format' or dictionary.item_keys[k] == 'channels' or dictionary.item_keys[k] == 'id'%}
+                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]]}} '  style="width: 50px;"/></td>
+                            {% elif dictionary.item_keys[k] == 'bitrate' or dictionary.item_keys[k] == 'samplerate' %}
+                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]]}} '  style="width: 75px;"/></td>
                             {% else %}
                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]] }}' /></td>
                             {% endif %}

@@ -3,7 +3,7 @@
 {% block content %}
     <a href="/albums">Albumy</a>
     <a class="active" href="/repositories">Repozytoria</a>
-    <span onclick="openImport()" class="glyphicon glyphicon-plus mySpan">Dodaj muzykę</span>
+    <a onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>
 
 {% endblock %}
 {% block content_body %}
@@ -26,7 +26,7 @@
         <br>
         <br>
         <div class="tableContainer-1">
-                <table class="table center">
+                <table class="table table-dark">
                     <tr>
                     {% for i in range(warning|length) %}
                         <td><font color="red">{{ warning[i] }}</font><br></td>
@@ -46,9 +46,12 @@
                     </tr>
                 </table>
         </div>
-      <br>
-        <br>
-        <table class="table table-hover center">
+
+    <br>
+    <br>
+    <br>
+    <br>
+        <table class="table table-striped table-hover table-dark center">
                 <thead>
                     <tr>
                         <td rowspan="2">Nazwa</td>

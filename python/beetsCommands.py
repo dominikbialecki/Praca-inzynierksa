@@ -40,7 +40,7 @@ Na wejściu wprowadzadź obiekt biblioteki
 #Funkcja kopiuje okładki albumów do folderu ./static/images,
 #a następnie nadpisuje album.artpath każdego albumu biblioteki 
 #do formatu html-friendly (../static/images)
-#Zwraca 0 gdy nie napotka błędów. Else zwraca liste niepoprawnych artpath
+#Zwraca liste ścieżek
 """
 def get_covers(albumlist):
     nonepath = '../static/images/image-not-found.jpg'

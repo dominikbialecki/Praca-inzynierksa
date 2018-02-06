@@ -81,7 +81,7 @@ label {
 
 .main2 {
     height:100%;
-    background-color:#303030;
+    background-color:#1A1C22;
     padding-bottom:20px;
     font-size: 28px; /* Increased text to enable scrolling */
     padding: 30px;
@@ -240,6 +240,15 @@ table {
 td {
     text-align: inherit;
 }
+
+#unedited{
+    border:5px solid DarkRed
+}
+
+#edited{
+    border:3px solid black
+}
+
 #first{
     width:15px;
 }
@@ -345,7 +354,9 @@ hr {
     padding-bottom:20px;
     height:100%;
     overflow:scroll;
-    background-color:#303030;
+    background-color:#1A1C22
+
+;
     
 }
 
