@@ -3,17 +3,30 @@
 {% block content %}
     <a href="/albums">Albumy</a>
     <a class="active" href="/repositories">Repozytoria</a>
-    <a class="glyphicon glyphicon-plus pos" href="/import">Dodaj muzykę</a>
+    <span onclick="openImport()" class="glyphicon glyphicon-plus mySpan">Dodaj muzykę</span>
 
 {% endblock %}
 {% block content_body %}
+<div id="import" class="topnav2" style="display:none;">
+    <div class="another">
+        <form action="/startImporting" method="post">
+            <input type="text" name="Path"></input>
+            <button class="btn btn-lg btn-primary" href="/edycja/dodaj">
+            <i class="glyphicon glyphicon-plus"></i>Importuj</button>
+            </button>
+        </form>
+    </div>
+    <div class="another2">
+        <span  onclick="closeImport()"class="glyphicon glyphicon-remove"/>
+    </div>
+</div>
+<div class="main3">
 <form action="/repositories?action" method="post">
-    <div class="main3">
         <br>
         <br>
         <br>
-
-                <table class="table">
+        <div class="tableContainer-1">
+                <table class="table center">
                     <tr>
                     {% for i in range(warning|length) %}
                         <td><font color="red">{{ warning[i] }}</font><br></td>
@@ -24,24 +37,25 @@
                         <td colspan="2"><a>Nazwa</a></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="path" value=""></input></td>
+                        <td><input type="text" name="path" class="whos" value=""></input></td>
                         <td><input type="text" name="remote_name" value=""></input></td>
-                        <td><button class="btn btn-lg btn-primary">
+                        <td><button>
                             <span class="glyphicon glyphicon-plus"></span>
                                 Dodaj
                             </button></td>
                     </tr>
-                    </table>
-
+                </table>
+        </div>
+      <br>
         <br>
-        <br>
-        <table class="table table-hover">
+        <table class="table table-hover center">
                 <thead>
                     <tr>
                         <td rowspan="2">Nazwa</td>
                         <td rowspan="2">Ścieżka</td>
                         <td rowspan="2">Automatyczne<br>pobieranie</td>
                         <td rowspan="2">Automatyczne<br> wysyłanie</td>
+                        <td colspan="3"/>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,9 +74,9 @@
                                 {% else %}
                                 <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember"</td>
                                 {% endif %}
-                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Pobierz"></input></td>
-                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Wyślij"></input></td>
-                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Wyczyść"></input></td>
+                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Pobierz"></input></td>
+                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Wyślij"></input></td>
+                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Wyczyść"></input></td>
 
                         </tr>
                     {% endfor %}
@@ -71,7 +85,7 @@
             </table>
         <br>
         <br>
-        <input type="submit" class="btn btn-lg btn-success" value="Zapisz zmiany"></input>
+        <input type="submit" class="inputeffect" value="Zapisz zmiany"></input>
 </form>
 
 
