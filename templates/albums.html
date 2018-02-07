@@ -50,7 +50,7 @@
                                 <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="text">Nieznany album</a></div>
                             {% else %}
                             <div class="wrapper">
-                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="text">{{ albums[i][0].album  }}</a></div>
+                                <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="text">{{ albums[i][0].album  }}</a></div>
                             {% endif %}
                         </div>
             {% endfor %}
@@ -61,8 +61,18 @@
         <div id="rows2" class="row">
             {% for i in range(artists|length) %}
                         <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src={{ artists[i][1] }}/></div>
-                             <div class="wrapper"><a href={{ "/details?id=" + artists[i][0].id|string }} id="artists[i][0].id" class="text">{{ artists[i][0].album }}</a></div>
+                            {% if artists[i][2][0].comments == 'unedited' %}
+                            <div class="dummy"><img class="my_pages"  src={{ artists[i][1] }} id="unedited" /></div>
+                            {% else %}
+                            <div class="dummy"><img class="my_pages" src={{ artists[i][1] }} id="edited"/></div>
+                            {% endif %}
+                             {% if artists[i][0].album == '' %}
+                            <div class="wrapper">
+                                <a href={{ "/details?id=" + artists[i][0].id|string }} id="artists[i][0].id" class="text">Nieznany album</a></div>
+                            {% else %}
+                            <div class="wrapper">
+                            <a href={{ "/details?id=" + artists[i][0].id|string }} id="artists[i][0].id" class="text">{{ artists[i][0].album  }}</a></div>
+                            {% endif %}
                         </div>
             {% endfor %}
         </div>
@@ -72,8 +82,18 @@
         <div id="rows2" class="row">
             {% for i in range(years|length) %}
                         <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src={{ years[i][1] }}/></div>
-                             <div class="wrapper"><a href={{ "/details?id=" + years[i][0].id|string }} id="years[i][0].id" class="text">{{ years[i][0].album }}</a></div>
+                            {% if years[i][2][0].comments == 'unedited' %}
+                            <div class="dummy"><img class="my_pages"  src={{ years[i][1] }} id="unedited" /></div>
+                            {% else %}
+                            <div class="dummy"><img class="my_pages" src={{ years[i][1] }} id="edited"/></div>
+                            {% endif %}
+                             {% if years[i][0].album == '' %}
+                            <div class="wrapper">
+                                <a href={{ "/details?id=" + years[i][0].id|string }} id="years[i][0].id" class="text">Nieznany album</a></div>
+                            {% else %}
+                            <div class="wrapper">
+                                <a href={{ "/details?id=" + years[i][0].id|string }} id="years[i][0].id" class="text">{{ years[i][0].album  }}</a></div>
+                            {% endif %}
                         </div>
             {% endfor %}
         </div>
@@ -89,7 +109,11 @@
                         {% if i == 0 %}
                             <thead>
                                     <tr>
+                                        {% if albums[i][0].album == '' %}
+                                        <th>Brak danych<th>
+                                        {% else %}
                                         <th>{{albums[i][0].album.0}}<th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <td>
@@ -105,10 +129,20 @@
                                 <td>
                                 <div id="rows2" class="row">
                         {% endif %}
-                                        <div class="col-md-2 col-sm-4">
-                                            <div class="dummy"><img class="my_pages" src="{{ albums[i][1] }}"/></div>
-                                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="{{ albums[i][0].id }}" class="thumbnail purple">{{ albums[i][0].album }}</a>
-                                        </div>
+                                <div class="col-md-2 col-sm-4">
+                                    {% if albums[i][2][0].comments == 'unedited' %}
+                                    <div class="dummy"><img class="my_pages"  src={{ albums[i][1] }} id="unedited" /></div>
+                                    {% else %}
+                                    <div class="dummy"><img class="my_pages" src={{ albums[i][1] }} id="edited"/></div>
+                                    {% endif %}
+                                    {% if albums[i][0].album == '' %}
+                                    <div class="wrapper">
+                                        <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="text">Nieznany album</a></div>
+                                    {% else %}
+                                    <div class="wrapper">
+                                        <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="text">{{ albums[i][0].album  }}</a></div>
+                                    {% endif %}
+                                </div>
                     {% endfor %}
                     </td>
                 </table>
@@ -122,26 +156,43 @@
                         {% if i == 0 %}
                             <thead>
                                     <tr>
+                                        {% if artists[i][0].albumartist == '' %}
+                                        <th>Nieznany artysta<th>
+                                        {% else %}
                                         <th>{{artists[i][0].albumartist}}<th>
+                                        {% endif %}
                                     </tr>
-                                </thead>
-                        {% elif artists[i][0].albumartist != artists[i-1][0].albumartist %}
-                                <thead>
-                                    <tr>
-                                        <th>{{artists[i][0].albumartist}}<th>
-                                    </tr>
-                                </thead>
-                        {% endif %}
-                        <div id="rows2" class="row">
+                            </thead>
                             <td>
-                                
+                            <div id="rows2" class="row">
+                        {% elif artists[i][0].albumartist != artists[i-1][0].albumartist %}
+                            </div>
+                            <thead>
+                                <tr>
+                                    <th>{{artists[i][0].albumartist}}<th>
+                                </tr>
+                            </thead>
+                            <td>
+                            <div id="rows2" class="row">
+                        {% endif %}
                                         <div class="col-md-2 col-sm-4">
-                                            <div class="dummy"><img class="my_pages" src="{{ artists[i][1] }}"/></div>
-                                             <div class="wrapper"><a href={{ "/details?id=" + artists[i][0].id|string }} id="{{ artists[i][0].id }}" class="text">{{ artists[i][0].album }}</a></div>
+                                            {% if artists[i][2][0].comments == 'unedited' %}
+                                            <div class="dummy"><img class="my_pages"  src={{ artists[i][1] }} id="unedited" /></div>
+                                            {% else %}
+                                            <div class="dummy"><img class="my_pages" src={{ artists[i][1] }} id="edited"/></div>
+                                            {% endif %}
+                                             {% if artists[i][0].album == '' %}
+                                            <div class="wrapper">
+                                                <a href={{ "/details?id=" + artists[i][0].id|string }} id="artists[i][0].id" class="text">Nieznany album</a></div>
+                                            {% else %}
+                                            <div class="wrapper">
+                                                <a href={{ "/details?id=" + artists[i][0].id|string }} id="artists[i][0].id" class="text">{{ artists[i][0].album  }}</a></div>
+                                            {% endif %}
                                         </div>
-                            </td>
-                         </div>
+
+
                     {% endfor %}
+                    </td>
                 </table>
     </div>
 
@@ -153,25 +204,42 @@
                         {% if i == 0 %}
                             <thead>
                                     <tr>
+                                        {% if years[i][0].year == 0 %}
+                                        <th>Nieznany rok<th>
+                                        {% else %}
                                         <th>{{years[i][0].year}}<th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
+                                <td>
+                                <div id="rows2" class="row">
                         {% elif years[i][0].year != years[i-1][0].year %}
+                            </div>
+                            </td>
                                 <thead>
                                     <tr>
                                         <th>{{years[i][0].year}}<th>
                                     </tr>
                                 </thead>
-                        {% endif %}
                             <td>
-                                <div id="rows2" class="row">
-                                        <div class="col-md-2 col-sm-4">
-                                            <div class="dummy"><img class="my_pages" src="{{ artists[i][1] }}"/></div>
-                                            <a href={{ "/details?id=" + years[i][0].id|string }} id="{{ years[i][0].id }}" class="text">{{ years[i][0].album }} </a>
-                                        </div>
+                            <div id="rows2" class="row">
+                        {% endif %}
+                                <div class="col-md-2 col-sm-4">
+                                    {% if years[i][2][0].comments == 'unedited' %}
+                                    <div class="dummy"><img class="my_pages"  src={{ years[i][1] }} id="unedited" /></div>
+                                    {% else %}
+                                    <div class="dummy"><img class="my_pages" src={{ years[i][1] }} id="edited"/></div>
+                                    {% endif %}
+                                     {% if years[i][0].album == '' %}
+                                    <div class="wrapper">
+                                        <a href={{ "/details?id=" + years[i][0].id|string }} id="years[i][0].id" class="text">Nieznany album</a></div>
+                                    {% else %}
+                                    <div class="wrapper">
+                                        <a href={{ "/details?id=" + years[i][0].id|string }} id="years[i][0].id" class="text">{{ years[i][0].album  }}</a></div>
+                                    {% endif %}
                                 </div>
-                            </td>
                     {% endfor %}
+                    </td>
                 </table>
 
     </div>

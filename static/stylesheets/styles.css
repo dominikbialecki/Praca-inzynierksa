@@ -190,10 +190,10 @@ th,tr,td{
     font-size:32px;
 }
 .logo{
-    width: 120px;
-    height: 40px;
-    padding-top:10px;
-    padding-left:10px;
+    width: 140px;
+    height: 50px;
+    padding-top:2px;
+    padding-left:2px;
 }
 .column22 .search-container button:hover {
     background: #ccc;

@@ -63,9 +63,7 @@
 }
 
 
-.main3 input, .contact_form textarea { 
-    border:1px solid #aaa;
-    box-shadow: 0px 0px 3px #ccc, 0 10px 15px #eee inset;
+.main3 input, .contact_form textarea {
     border-radius:2px;
 }
 .main3 input:focus, .main3 textarea:focus {
@@ -96,7 +94,7 @@
     -o-box-shadow: 0 1px 0 0 #9fd574 inset;
     color: white;
     font-weight: bold;
-    padding: 6px 20px;
+    padding: 3px 16px;
     text-align: center;
     text-shadow: 0 -1px 0 #396715;
 }

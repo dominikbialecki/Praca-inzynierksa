@@ -94,19 +94,26 @@
                     {% endfor %}
                 </table>
             {% endfor %}
-                        
+            <table>
+                <tr>
+                    <td>
             <button type="submit">Zapisz zmiany</button>
+                    </td>
         </form>
-    <br><hr /><br>
-    {% if expanded == 'true' %}
-        <form action={{"/details?"+id_arg}} method="post">
-            <button type="submit">Ukryj szczegóły</button>
-        </form>
-    {% else %}
-        <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
-            <button class="btn btn-lg btn-success" type="submit">Pokaż szczegóły</button>
-        </form>
-    {% endif %}
+                    <td></td>
+                     <td>
+                        {% if expanded == 'true' %}
+                            <form action={{"/details?"+id_arg}} method="post">
+                                <button type="submit">Ukryj szczegóły</button>
+                            </form>
+                        {% else %}
+                            <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
+                                <button  type="submit">Pokaż szczegóły</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
 
      
 </div>
