@@ -14,7 +14,7 @@
     <div class="another">
         <form action="/startImporting" method="post">
             <input type="text" name="Path"></input>
-            <button class="btn btn-lg btn-primary" href="/edycja/dodaj">
+            <button class="btn btn-lg btn-primary">
             <i class="glyphicon glyphicon-plus"></i>Importuj</button>
             </button>
         </form>
@@ -29,22 +29,7 @@
         {% set albkeylen = dictionary.language_album|length %}
         {% set itemkeylen = dictionary.language_item|length %}
     
-    {% if expanded == 'true' %}
-        <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
-    {% else %}
-        <form action={{"/details?"+id_arg+"&remotes=saved"}} method="post">
-    {% endif %}
     <br>
-    {% if details|length == 1 %}
-            {% for name in remotes[0] %}
-                <label><input name="{{name}}" type="checkbox" checked><font color="green">{{name}}</font></label>
-            {% endfor %}
-            {% for name in remotes[1] %}
-                <label><input name="{{name}}" type="checkbox"><font color="grey">{{name}}</font></label>
-            {% endfor %}
-            <button class="btn btn-lg btn-primary" type="submit">Zapisz</button>
-        </form>
-    {% endif %}
     <br>
     <br>
 
@@ -70,7 +55,7 @@
                 <table class="table table-dark center">
                     <tr>
                     {% for k in range(itemkeylen) %}
-                        <td> {{ dictionary.language_item[k] }} </td>
+                        <td > {{ dictionary.language_item[k] }} </td>
                     {% endfor %}
                     </tr>
                     {%for j in range(details[i][2]|length) %}
@@ -114,7 +99,24 @@
                     </td>
                 </tr>
             </table>
-
-     
+        {% if expanded == 'true' %}
+            <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
+        {% else %}
+            <form action={{"/details?"+id_arg+"&remotes=saved"}} method="post">
+        {% endif %}
+        <br>
+        <p align="right">
+        {% if details|length == 1 %}
+                {% for name in remotes[0] %}
+                    <label><input name="{{name}}" type="checkbox" checked><font color="green">{{name}}</font></label>
+                {% endfor %}
+                {% for name in remotes[1] %}
+                    <label><input name="{{name}}" type="checkbox"><font color="grey">{{name}}</font></label>
+                {% endfor %}
+                <button class="btn btn-lg btn-primary" type="submit">Zmień</button>
+            </form>
+        {% endif %}
+        </p>
+        <br>
 </div>
 {% endblock %}
