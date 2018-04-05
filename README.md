@@ -8,4 +8,6 @@ https://docs.google.com/presentation/d/1DEK8QYTeFih6zwKB7A8LEhwM6S1lh7SVge3Ws7el
 
 
 
-Część front-endu (JavaScript i część CSS) została napisana przed Piotra Trawińskiego (użytkownik piotrtr92 i arhelius), który ostatecznie nie podszedł do obrony podejdzie w 2019 roku. 
+
+
+Część front-endu (JavaScript i część CSS) została napisana przed Piotra Trawińskiego (użytkownik piotrtr92 i arhelius).
